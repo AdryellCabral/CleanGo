@@ -106,7 +106,7 @@ class OrdersViewTest(APITestCase):
             format='json'
         )
 
-        # Fazendo os testes com a resposta da criação.
+        # Fazendo o teste bem sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 201)
         self.assertDictEqual(
             response.json(),
@@ -116,11 +116,28 @@ class OrdersViewTest(APITestCase):
             )
         )
 
-    # def test_create_an_order_with_invalid_token(self):
-    #     """
-    #     Tentativa de criação com um token que
-    #     não seja de um customer.
-    #     """
+    def test_create_an_order_with_invalid_token(self):
+        """
+        Tentativa de criação com um token que
+        não seja de um customer.
+        """
 
-    #     # Simulando um login de partner
-        
+        # Simulando um login de partner
+        token = Token.objects.get_or_create(user=self.partner_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                detail="You do not have permission to perform this action."
+            )
+        )
