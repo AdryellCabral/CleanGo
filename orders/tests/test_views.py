@@ -3,7 +3,6 @@ from rest_framework.authtoken.models import Token
 
 from accounts.models import Customer, Partner
 from ..models import (
-    Order,
     Address,
     ResidenceType,
     ServiceType
@@ -11,6 +10,9 @@ from ..models import (
 
 
 class OrdersViewTest(APITestCase):
+    """
+    Esse é o teste para Views relacionadas a Order
+    """
     @classmethod
     def setUpTestData(cls):
         customer_data = dict(
@@ -64,39 +66,61 @@ class OrdersViewTest(APITestCase):
 
         cls.partner = Partner.objects.create(**partner_data)
 
-    def test_new_order_successful_created(self):
-
-        order_data = dict(
+        cls.order_data = dict(
             hours=2,
             date="01/01/2030",
             bathrooms=2,
             bedrooms=2,
             value=200.00,
-            residence=self.residence,
-            service=self.service,
+            residence=cls.residence,
+            service=cls.service,
             opened=True,
             completed=False,
-            address=self.customer_address
+            address=cls.customer_address
         )
 
-        customer_login_data = dict(
-            email=self.customer.email,
-            password=self.customer.password
+        cls.customer_login_data = dict(
+            email=cls.customer.email,
+            password=cls.customer.password
         )
 
-        token = Token.objects.get_or_create(user=customer_login_data)
+        cls.partner_login_data = dict(
+            email=cls.partner.email,
+            password=cls.partner.password
+        )
+
+    def test_only_customer_can_create_an_successful_order(self):
+        """
+        Aqui a criação de ordem será bem sucedida,
+        criação sendo feito por um Customer.
+        """
+
+        # Simulando um login de customer.
+        token = Token.objects.get_or_create(user=self.customer_login_data)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
         response = self.client.post(
             '/api/orders/',
-            order_data,
+            self.order_data,
             format='json'
         )
 
+        # Fazendo os testes com a resposta da criação.
         self.assertEqual(response.status_code, 201)
         self.assertDictEqual(
             response.json(),
             dict(
                 id=1,
-                **order_data
+                **self.order_data
             )
         )
+
+    # def test_create_an_order_with_invalid_token(self):
+    #     """
+    #     Tentativa de criação com um token que
+    #     não seja de um customer.
+    #     """
+
+    #     # Simulando um login de partner
+        
