@@ -66,7 +66,7 @@ class OrdersViewTest(APITestCase):
 
         cls.partner = Partner.objects.create(**partner_data)
 
-        cls.order_data = dict(
+        cls.order_successful_data = dict(
             hours=2,
             date="01/01/2030",
             bathrooms=2,
@@ -77,6 +77,18 @@ class OrdersViewTest(APITestCase):
             opened=True,
             completed=False,
             address=cls.customer_address
+        )
+
+        cls.order_without_fields_data = dict(
+            hours=2,
+            date="01/01/2030",
+            bathrooms=2,
+            bedrooms=2,
+            value=200.00,
+            residence=cls.residence,
+            service=cls.service,
+            opened=True,
+            completed=False,
         )
 
         cls.customer_login_data = dict(
@@ -102,25 +114,69 @@ class OrdersViewTest(APITestCase):
         # Fazendo a criação de uma ordem.
         response = self.client.post(
             '/api/orders/',
-            self.order_data,
+            self.order_successful_data,
             format='json'
         )
 
-        # Fazendo os testes com a resposta da criação.
+        # Fazendo o teste bem sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 201)
         self.assertDictEqual(
             response.json(),
             dict(
                 id=1,
-                **self.order_data
+                **self.order_successful_data
             )
         )
 
-    # def test_create_an_order_with_invalid_token(self):
-    #     """
-    #     Tentativa de criação com um token que
-    #     não seja de um customer.
-    #     """
+    def test_create_an_order_with_invalid_token(self):
+        """
+        Tentativa de criação com um token que
+        não seja de um customer.
+        """
 
-    #     # Simulando um login de partner
-        
+        # Simulando um login de partner
+        token = Token.objects.get_or_create(user=self.partner_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                detail="You do not have permission to perform this action."
+            )
+        )
+
+        def test_create_an_order_without_fields(self):
+            """
+            Teste mal sucedido de criação de ordem sem algum campo.
+            """
+
+        # Simulando um login de customer.
+        token = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                teste=[
+                    "This field is required."
+                    ]
+            )
+        )
