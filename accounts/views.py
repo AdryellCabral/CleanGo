@@ -61,9 +61,9 @@ class AccountByIdView(APIView):
     def get(self, request, customer_id=''):
 
         try:        
-            customer = User.objects.get(id=customer_id)
-            serialized = UserSerializer(customer)
-            return Response(serialized.data, status=status.HTTP_200_OK)
+            customer = Customer.objects.get(id=customer_id)
+            serialized = CustomerSerializer(customer)
+            return Response(serialized.data['user_customer'], status=status.HTTP_200_OK)
         except:               
             return Response({'message': 'Invalid customer_id'}, status=status.HTTP_404_NOT_FOUND)
 
