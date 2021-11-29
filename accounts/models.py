@@ -1,16 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import date
 
 
 class User(AbstractUser):
     full_name = models.CharField(max_length=255)
-    cpf = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)  
+    cpf = models.CharField(max_length=50, unique=True)
+    phone = models.CharField(max_length=50, unique=True)  
 
 
 class Customer(models.Model):
-    user_customer = models.OneToOneField('User', on_delete=models.CASCADE)   
+    user_customer = models.OneToOneField('User', on_delete=models.CASCADE)
 
 
 class Partner(models.Model):
