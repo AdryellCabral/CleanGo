@@ -3,13 +3,14 @@ from rest_framework.authtoken.models import Token
 
 from accounts.models import Customer, Partner
 from ..models import (
+    Orders,
     Address,
     ResidenceType,
     ServiceType
 )
 
 
-class OrdersViewTest(APITestCase):
+class TestOrdersView(APITestCase):
     """
     Esse é o teste para Views relacionadas a Order
     """
@@ -66,7 +67,7 @@ class OrdersViewTest(APITestCase):
 
         cls.partner = Partner.objects.create(**partner_data)
 
-        cls.order_data = dict(
+        cls.order_successful_data = dict(
             hours=2,
             date="01/01/2030",
             bathrooms=2,
@@ -77,6 +78,18 @@ class OrdersViewTest(APITestCase):
             opened=True,
             completed=False,
             address=cls.customer_address
+        )
+
+        cls.order_without_fields_data = dict(
+            hours=2,
+            date="01/01/2030",
+            bathrooms=2,
+            bedrooms=2,
+            value=200.00,
+            residence=cls.residence,
+            service=cls.service,
+            opened=True,
+            completed=False,
         )
 
         cls.customer_login_data = dict(
@@ -96,31 +109,210 @@ class OrdersViewTest(APITestCase):
         """
 
         # Simulando um login de customer.
-        token = Token.objects.get_or_create(user=self.customer_login_data)
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
             '/api/orders/',
-            self.order_data,
+            self.order_successful_data,
             format='json'
         )
 
-        # Fazendo os testes com a resposta da criação.
+        # Fazendo o teste bem sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 201)
         self.assertDictEqual(
             response.json(),
             dict(
                 id=1,
-                **self.order_data
+                **self.order_successful_data
             )
         )
 
-    # def test_create_an_order_with_invalid_token(self):
-    #     """
-    #     Tentativa de criação com um token que
-    #     não seja de um customer.
-    #     """
+    def test_create_an_order_with_invalid_token(self):
+        """
+        Tentativa de criação com um token que
+        não seja de um customer.
+        """
 
-    #     # Simulando um login de partner
-        
+        # Simulando um login de partner
+        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                detail="You do not have permission to perform this action."
+            )
+        )
+
+    def test_create_an_order_without_fields(self):
+        """
+        Teste mal sucedido de criação de ordem sem algum campo.
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                address=[
+                    "This field is required."
+                    ]
+            )
+        )
+
+    def test_get_order_without_authentication(self):
+        """
+        Teste mal sucedido por não estar autenticado.
+        """
+
+        # Fazendo o request get de uma ordem.
+        response = self.client.get(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 401)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                detail="Authentication credentials were not provided."
+            )
+        )
+
+    def test_get_order_successful_with_customer_authentication(self):
+        """
+        Teste de request get bem sucedido de ordem logado com customer.
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o request get de uma ordem.
+        response = self.client.get(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(Orders.object.all()), len(response.data))
+        self.assertEqual(
+            response.data[0].pop('id'),
+            self.order_successful_data
+        )
+
+    def test_get_order_successful_with_partner_authentication(self):
+        """
+        Teste de request get bem sucedido de ordem logado com partner.
+        """
+
+        # Simulando um login de partner.
+        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o request get de uma ordem.
+        response = self.client.get(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(Orders.object.all()), len(response.data))
+        self.assertEqual(
+            response.data[0].pop('id'),
+            self.order_successful_data
+        )
+
+    def test_get_order_by_id_unsuccessful_without_authentication(self):
+        """
+        Teste de request get por id da order sem autenticação.
+        """
+
+        # Fazendo o request get de uma ordem.
+        response = self.client.get(
+            '/api/orders/1',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 401)
+        self.assertDictEqual(
+            response.json(),
+            dict(
+                detail="Authentication credentials were not provided."
+            )
+        )
+
+    def test_get_order_by_id_successful_with_customer_authentication(self):
+        """
+        Teste de request get bem sucedido de ordem logado com customer.
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        response = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o request get de uma ordem.
+        response = self.client.get(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Fazendo o teste mal sucedido com a resposta da criação.
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(Orders.object.all()), len(response.data))
+        self.assertEqual(
+            response.data[0].pop('id'),
+            self.order_successful_data
+        )
