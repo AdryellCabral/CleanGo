@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from accounts.serializers import UserSerializer, CustomerSerializer, UserUpdateSerializer
+from accounts.serializers import UserSerializer, CustomerSerializer, CustomerUpdateSerializer
 from accounts.models import User, Customer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -25,7 +25,7 @@ class AccountView(APIView):
             new_user = User.objects.create_user(**data)
             new_customer = Customer.objects.create(user_customer=new_user)
             serialized = CustomerSerializer(new_customer)
-            return Response(serialized.data['user_customer'], status=status.HTTP_201_CREATED)
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
             return Response({'message': str(e)}, status=status.HTTP_409_CONFLICT)
 
@@ -63,25 +63,25 @@ class AccountByIdView(APIView):
         try:        
             customer = Customer.objects.get(id=customer_id)
             serialized = CustomerSerializer(customer)
-            return Response(serialized.data['user_customer'], status=status.HTTP_200_OK)
+            return Response(serialized.data, status=status.HTTP_200_OK)
         except:               
             return Response({'message': 'Invalid customer_id'}, status=status.HTTP_404_NOT_FOUND)
 
 
     def patch(self, request, customer_id=''):
 
-        authenticated_customer = request.user
+        user = request.user
         update_data = request.data
 
         try:
-            customer = User.objects.get(id=customer_id)                
+            customer = Customer.objects.get(id=customer_id)                
         except:
             return Response({'message': 'Invalid customer_id'}, status=status.HTTP_404_NOT_FOUND)
 
 
-        if authenticated_customer.id == customer.id:
+        if user.id == customer.user_customer.id:
             try:
-                data_serializer = UserUpdateSerializer(customer, data=update_data)
+                data_serializer = CustomerUpdateSerializer(customer.user_customer, data=update_data)
                 if not data_serializer.is_valid():
                     return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -90,7 +90,7 @@ class AccountByIdView(APIView):
                 updated_customer = Customer.objects.get(id=customer_id)
                 serialized = CustomerSerializer(updated_customer)
 
-                return Response(serialized.data['user_customer'], status=status.HTTP_200_OK)
+                return Response(serialized.data, status=status.HTTP_200_OK)
             except IntegrityError as e:
                 return Response({'message': str(e)}, status=status.HTTP_409_CONFLICT)
         else:
