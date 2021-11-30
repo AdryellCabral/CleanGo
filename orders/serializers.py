@@ -42,3 +42,19 @@ class OrderSerializer(serializers.Serializer):
     residence = ResidenceTypeSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
     service = ServiceTypeSerializer(read_only=True)
+
+    def update(self, instance, validated_data):
+            instance.hours = validated_data.get('hours', instance.hours)
+            instance.date = validated_data.get('date', instance.date)
+            instance.bathrooms = validated_data.get('bathrooms', instance.bathrooms)
+            instance.bedrooms = validated_data.get('bedrooms', instance.bedrooms)
+            instance.value = validated_data.get('value', instance.value)
+            instance.completed = validated_data.get('completed', instance.completed)
+            instance.opened = validated_data.get('opened', instance.opened)
+            # instance.partner = validated_data.get('partner', instance.partner)
+            instance.residence = validated_data.get('residence', instance.residence)
+            instance.address = validated_data.get('address', instance.address)
+            instance.service = validated_data.get('service', instance.service)
+            instance.save()
+            return instance
+
