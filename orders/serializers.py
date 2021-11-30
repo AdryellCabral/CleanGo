@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User, Customer, Partner
-from accounts.serializers import UserSerializer, CustomerSerializer 
+from accounts.serializers import CustomerSerializer 
 # PartnerSerializer
 
 
