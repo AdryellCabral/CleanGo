@@ -3,7 +3,7 @@ from rest_framework.authtoken.models import Token
 
 from accounts.models import Customer, Partner
 from ..models import (
-    Orders,
+    Order,
     Address,
     ResidenceType,
     ServiceType
@@ -228,7 +228,7 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Orders.object.all()), len(response.data))
+        self.assertEquals(len(Order.object.all()), len(response.data))
         self.assertEqual(
             response.data[0].pop('id'),
             self.order_successful_data
@@ -259,7 +259,7 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Orders.object.all()), len(response.data))
+        self.assertEquals(len(Order.object.all()), len(response.data))
         self.assertEqual(
             response.data[0].pop('id'),
             self.order_successful_data
@@ -311,7 +311,7 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Orders.object.all()), len(response.data))
+        self.assertEquals(len(Order.object.all()), len(response.data))
         self.assertEqual(
             response.data[0].pop('id'),
             self.order_successful_data

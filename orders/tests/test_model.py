@@ -32,12 +32,12 @@ class TestOrderModel(TestCase):
             name = cls.residenceName
         )
 
-        cls.place="Upton Forge",
-        cls.number="t",
-        cls.neighborhood="Account",
-        cls.complements="fuchsia Applications TCP",
-        cls.city="North Alberto",
-        cls.state="SP",
+        cls.place="Upton Forge"
+        cls.number="t"
+        cls.neighborhood="Account"
+        cls.complements="fuchsia Applications TCP"
+        cls.city="North Alberto"
+        cls.state="SP"
         cls.cep=82000000
 
         cls.address = Address.objects.create(
@@ -51,12 +51,12 @@ class TestOrderModel(TestCase):
         )
 
         cls.hours = 2
-        cls.date = date.fromisoformat("01/01/2030")
+        cls.date=date.fromisoformat("2030-09-10")
         cls.bathrooms = 2
         cls.bedrooms = 2
         cls.value = 200.00
-        cls.opened = True,
-        cls.completed = False,
+        cls.opened = True
+        cls.completed = False
 
         cls.order = Order.objects.create(
             hours = cls.hours,
@@ -64,11 +64,12 @@ class TestOrderModel(TestCase):
             bathrooms = cls.bathrooms,
             bedrooms = cls.bedrooms,
             value = cls.value,
-            residences = cls.residenceType,
-            service = cls.serviceType,
+            residence = cls.residence,
+            service = cls.service,
             opened = cls.opened,
             completed = cls.completed,
-            address = cls.address
+            address = cls.address,
+            customer = cls.customer
         )
 
     def test_order_field_type(self):
