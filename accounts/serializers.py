@@ -15,10 +15,14 @@ class UserSerializer(serializers.Serializer):
 
 class CustomerSerializer(serializers.Serializer):
 
-    user_customer = UserSerializer()
+    id = serializers.IntegerField(read_only=True)
+    email = serializers.EmailField(source='user_customer.email')    
+    full_name = serializers.CharField(source='user_customer.full_name')
+    cpf = serializers.CharField(source='user_customer.cpf')
+    phone = serializers.CharField(source='user_customer.phone')
 
 
-class UserUpdateSerializer(serializers.Serializer):
+class CustomerUpdateSerializer(serializers.Serializer):
 
     id = serializers.IntegerField(read_only=True)
     username = serializers.CharField(required=False)
