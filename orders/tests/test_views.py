@@ -63,7 +63,8 @@ class TestOrdersView(APITestCase):
             email='partner@email.com',
             password='1234',
             cpf='17203537510',
-            phone="45921541254"
+            phone="45921541254",
+            is_staff=False
         )
 
         user_partner = User.objects.create_user(
@@ -495,28 +496,16 @@ class TestOrdersView(APITestCase):
         Teste mal sucedido de deletar uma ordem pelo parceiro
         """
 
-        # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(
-            user=self.customer.user_customer
-        )
-        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
-
-        # Fazendo a criação de uma ordem.
-        new_order = self.client.post(
-            '/api/orders/',
-            self.order_successful_data,
-            format="json"
-        )
-
         # Simulando um login de partner.
         token, _ = Token.objects.get_or_create(
             user=self.partner.user_partner
             )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
+        print("Token Partner", token)
 
         # Tentando deletar uma ordem
         response = self.client.delete(
-            f'/api/orders/{new_order.id}/',
+            '/api/orders/1/',
             format='json'
         )
 
@@ -529,7 +518,7 @@ class TestOrdersView(APITestCase):
 
         # Simulando um login de customer.
         token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         new_order = self.client.post(
@@ -543,7 +532,7 @@ class TestOrdersView(APITestCase):
 
         # Tentando deletar uma ordem
         response = self.client.delete(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.id}/',
             format='json'
         )
 
@@ -562,7 +551,7 @@ class TestOrdersView(APITestCase):
 
         # Tentando deletar uma ordem
         response = self.client.delete(
-            '/api/orders/1',
+            '/api/orders/1/',
             format='json'
         )
 
