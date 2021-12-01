@@ -18,25 +18,26 @@ class OrdersView(APIView):
 
     def post(self, request):
         user = request.user
-
+        request.data['partner'] = None
         data = request.data
         data_residence = data.pop('residence')
         data_address = data.pop('address')
         data_service = data.pop('service')
 
-        data_serializer = OrderSerializer(data=request.data)
+        residence = ResidenceType.objects.get(name=data_residence)
+        service = ServiceType.objects.get(name=data_service)
+        address = Address.objects.get_or_create(**data_address)
+        data['residence'] = residence
+        data['service'] = service
+        data['address'] = address[0]
+
+        data_serializer = OrderSerializer(data=data)
         if not data_serializer.is_valid():
             return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         customer = Customer.objects.get(user_customer=user)
-        residence = ResidenceType.objects.get(name=data_residence)
-        service = ServiceType.objects.get(name=data_service)
-        address = Address.objects.get_or_create(**data_address)
 
         data['customer'] = customer
-        data['residence'] = residence
-        data['service'] = service
-        data['address'] = address[0]
                
         try:        
             new_order = Order.objects.create(**data)
