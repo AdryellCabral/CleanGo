@@ -347,3 +347,108 @@ class TestOrdersView(APITestCase):
             response.data[0].pop('id'),
             self.order_successful_data
         )
+
+    def test_order_accepted_by_partner_and_completed_by_customer(self):
+        """
+        teste de update para aceitar a ordem e completa-la
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        new_order = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Simulando um login de partner.
+        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo o request path para aceitar a ordem.
+        response = self.client.patch(
+            f'/api/orders/{new_order.id}',
+            dict(opened=False),
+            format='json'
+        )
+
+        # Fazendo update direto no banco.
+        new_order.refresh_from_db()
+
+         # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo o request path para completar a ordem.
+        response = self.client.patch(
+            f'/api/orders/{new_order.id}',
+            dict(completed=True),
+            format='json'
+        )
+
+        # Fazendo os testes de aceite da ordem.
+        self.assertEquals(200, response.status_code)
+        self.assertEquals(False, response.opened)
+        self.assertEquals(True, response.completed)
+
+    def test_unsuccessful_order_accept_by_customer(self):
+        """
+        teste de update para aceitar a ordem com usuário customer
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        new_order = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo o request path da order.
+        response = self.client.patch(
+            f'/api/orders/{new_order.id}',
+            dict(opened=False),
+            format='json'
+        )
+
+        # Fazendo os testes de aceite da ordem
+        self.assertEquals(400, response.status_code)
+
+    def test_unsuccessful_order_accept_by_anonymous(self):
+        """
+        teste de update para aceitar a ordem com o usuário anônimo
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        new_order = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Simulando um anônimo.
+        self.client.credentials()
+
+        # Fazendo o request path da order.
+        response = self.client.patch(
+            f'/api/orders/{new_order.id}',
+            dict(opened=False),
+            format='json'
+        )
+
+        # Fazendo os testes de aceite da ordem
+        self.assertEquals(400, response.status_code)
