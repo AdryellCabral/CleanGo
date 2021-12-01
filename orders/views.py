@@ -36,7 +36,7 @@ class OrdersView(APIView):
         data['customer'] = customer
         data['residence'] = residence
         data['service'] = service
-        data['address'] = address[0]         
+        data['address'] = address[0]
                
         try:        
             new_order = Order.objects.create(**data)
@@ -45,12 +45,11 @@ class OrdersView(APIView):
         except IntegrityError as e:
             return Response({'message': str(e)}, status=status.HTTP_409_CONFLICT)
 
-
-    def get(self, request):            
+    def get(self, request):
             orders_list = Order.objects.all()
             serialized_list = OrderSerializer(orders_list, many=True)
   
-            return Response(serialized_list.data, status=status.HTTP_200_OK)  
+            return Response(serialized_list.data, status=status.HTTP_200_OK)
 
 class OrdersRetrieveUpdateDeleteView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -72,14 +71,14 @@ class OrdersRetrieveUpdateDeleteView(APIView):
         try:
             orders_list = Order.objects.get(id=order_id)
             serialized_list = OrderSerializer(orders_list, many=False)
-  
-            return Response(serialized_list.data, status=status.HTTP_200_OK)  
+
+            return Response(serialized_list.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response({"errors": "invalid order_id"}, status=status.HTTP_404_NOT_FOUND)
-  
-    def delete(self,request, course_id=''):
+
+    def delete(self,request, order_id=''):
         try:
-            Order.objects.get(id=course_id).delete()
+            Order.objects.get(id=order_id).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ObjectDoesNotExist:
-            return Response({"errors": "invalid course_id"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"errors": "invalid order_id"}, status=status.HTTP_404_NOT_FOUND)

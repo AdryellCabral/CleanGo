@@ -1,7 +1,4 @@
 from rest_framework import serializers
-from accounts.serializers import CustomerSerializer 
-# PartnerSerializer
-
 
 class ResidenceTypeSerializer(serializers.Serializer):
 
@@ -26,6 +23,26 @@ class ServiceTypeSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
 
+class PartnerSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(read_only=True)
+    email = serializers.EmailField(source='user_partner.email')    
+    full_name = serializers.CharField(source='user_partner.full_name')
+    cpf = serializers.CharField(source='user_partner.cpf')
+    birthday = serializers.DateField()
+    gender = serializers.CharField()
+    phone = serializers.CharField(source='user_partner.phone')
+    address = AddressSerializer()
+    service = ServiceTypeSerializer()    
+    describe = serializers.CharField()
+
+class CustomerSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(read_only=True)
+    email = serializers.EmailField(source='user_customer.email')    
+    full_name = serializers.CharField(source='user_customer.full_name')
+    cpf = serializers.CharField(source='user_customer.cpf')
+    phone = serializers.CharField(source='user_customer.phone')
 
 class OrderSerializer(serializers.Serializer):
 
@@ -38,23 +55,14 @@ class OrderSerializer(serializers.Serializer):
     completed = serializers.BooleanField()
     opened = serializers.BooleanField()
     customer = CustomerSerializer(read_only=True)
-    # partner = PartnerSerializer(allow_null=True)
+    partner = PartnerSerializer(allow_null=True)
     residence = ResidenceTypeSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
     service = ServiceTypeSerializer(read_only=True)
 
     def update(self, instance, validated_data):
-            instance.hours = validated_data.get('hours', instance.hours)
-            instance.date = validated_data.get('date', instance.date)
-            instance.bathrooms = validated_data.get('bathrooms', instance.bathrooms)
-            instance.bedrooms = validated_data.get('bedrooms', instance.bedrooms)
-            instance.value = validated_data.get('value', instance.value)
             instance.completed = validated_data.get('completed', instance.completed)
             instance.opened = validated_data.get('opened', instance.opened)
-            # instance.partner = validated_data.get('partner', instance.partner)
-            instance.residence = validated_data.get('residence', instance.residence)
-            instance.address = validated_data.get('address', instance.address)
-            instance.service = validated_data.get('service', instance.service)
             instance.save()
             return instance
 
