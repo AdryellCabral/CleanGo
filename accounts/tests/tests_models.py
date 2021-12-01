@@ -1,5 +1,6 @@
 from django.test import TestCase
-from accounts.models import User, Customer
+from accounts.models import User, Customer, Partner
+from orders.models import Address, ServiceType
 
 
 class CustomerModelTest(TestCase):
@@ -25,6 +26,37 @@ class CustomerModelTest(TestCase):
             user_customer=cls.user
         )
 
+        cls.user_for_partner = User.objects.create(
+            password="1234",
+            full_name="John Wick Loves his dog",
+            cpf="12345678912",
+            phone="31912345678",
+        )
+
+        cls.service = ServiceType.objects.create(
+            name="passar roupa"
+        )
+
+        cls.address = Address.objects.create(
+            place="House",
+            number="345",
+            neighborhood="Parque das oliveiras",
+            complements="You are beautyful",
+            city="BHzada",
+            state="Pão de queijo",
+            cep="000000000000"
+        )
+
+        cls.partner = Partner.objects.create(
+            user_partner=cls.user_for_partner,
+            describe="Some description.",
+            gender="F",
+            birthday="1999-08-15",
+            service=cls.service,
+            address=cls.address
+        )
+
+
     def test_customer_fields(self):
         self.assertIsInstance(self.customer.user_customer, User)
 
@@ -44,5 +76,37 @@ class CustomerModelTest(TestCase):
 
         self.assertIsInstance(self.customer.user_customer.phone, str)
         self.assertEqual(self.customer.user_customer.phone, self.phone)
+
+    def test_partner_table_fields(self):
+
+        partner = Partner.objects.get(id=self.partner.id)
+
+        self.assertIsInstance(self.partner, Partner)
+
+        self.assertIsInstance(self.partner.user_partner, User)
+
+        self.assertIsInstance(self.partner.service, ServiceType)
+
+        self.assertIsInstance(self.partner.address, Address)
+
+        self.assertIsInstance(self.user_for_partner.full_name, str)
+        self.assertEqual(self.user_for_partner.full_name, self.partner.user_partner.full_name)
+
+        self.assertIsInstance(self.partner.id, int)
+        self.assertEqual(self.partner.id, partner.id)
+
+        self.assertIsInstance(self.partner.describe, str)
+        self.assertEqual(self.partner.describe, partner.describe)
+
+        self.assertIsInstance(self.partner.gender, str)
+        self.assertEqual(self.partner.gender, partner.gender)
+
+        self.assertIsInstance(self.partner.service.id, int)
+        self.assertEqual(self.partner.service, self.service)
+
+        self.assertIsInstance(self.partner.address.id, int)
+        self.assertEqual(self.partner.address, self.address)
+
+
 
         
