@@ -378,7 +378,7 @@ class TestOrdersView(APITestCase):
         # Fazendo update direto no banco.
         new_order.refresh_from_db()
 
-         # Simulando um login de customer.
+        # Simulando um login de customer.
         token, _ = Token.objects.get_or_create(user=self.customer_login_data)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
 
@@ -409,10 +409,6 @@ class TestOrdersView(APITestCase):
             self.order_successful_data,
             format='json'
         )
-
-        # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
 
         # Fazendo o request path da order.
         response = self.client.patch(
@@ -452,3 +448,99 @@ class TestOrdersView(APITestCase):
 
         # Fazendo os testes de aceite da ordem
         self.assertEquals(400, response.status_code)
+
+    def test_delete_order_by_customer(self):
+        """
+        Teste para deletar as ordens, só podem ser deletadas pelo customer
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        new_order = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Deletando uma ordem
+        response = self.client.delete(
+            f'/api/orders/{new_order.id}',
+            format='json'
+        )
+
+        self.assertEqual(204, response.status_code)
+
+    def test_unsuccessful_order_deleted_by_partner(self):
+        """
+        Teste mal sucedido de deletar uma ordem pelo parceiro
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        new_order = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Simulando um login de partner.
+        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Tentando deletar uma ordem
+        response = self.client.delete(
+            f'/api/orders/{new_order.id}',
+            format='json'
+        )
+
+        self.assertEqual(403, response.status_code)
+
+    def test_unsuccessful_order_deleted_by_anonymous(self):
+        """
+        Teste mal sucedido de deletar uma ordem pelo anônimo
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Fazendo a criação de uma ordem.
+        new_order = self.client.post(
+            '/api/orders/',
+            self.order_successful_data,
+            format='json'
+        )
+
+        # Simulando um login de anônimo.
+        self.client.credentials()
+
+        # Tentando deletar uma ordem
+        response = self.client.delete(
+            f'/api/orders/{new_order.id}',
+            format='json'
+        )
+
+        self.assertEqual(401, response.status_code)
+
+    def test_unsuccessful_order_not_found(self):
+        """
+        Teste mal sucedido por não achar o id da ordem
+        """
+
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+
+        # Tentando deletar uma ordem
+        response = self.client.delete(
+            '/api/orders/1',
+            format='json'
+        )
+
+        self.assertEqual(404, response.status_code)
