@@ -22,30 +22,62 @@ Running migrations:
   Applying auth.0012_alter_user_first_name_max_length... OK
   Applying accounts.0001_initial... OK
   Applying accounts.0002_auto_20211125_2054... OK
+  Applying orders.0001_initial... OK
+  Applying accounts.0003_auto_20211130_1816... OK
+  Applying accounts.0004_auto_20211130_1818... OK
+  Applying accounts.0005_auto_20211130_1822... OK
   Applying admin.0001_initial... OK
   Applying admin.0002_logentry_remove_auto_add... OK
   Applying admin.0003_logentry_add_action_flag_choices... OK
   Applying authtoken.0001_initial... OK
   Applying authtoken.0002_auto_20160226_1747... OK
   Applying authtoken.0003_tokenproxy... OK
-  Applying orders.0001_initial... OK
   Applying sessions.0001_initial... OK
 System check identified no issues (0 silenced).
 test_customer_fields (accounts.tests.tests_models.CustomerModelTest) ... ok
 test_create_customer_fail_when_cpf_exists (accounts.tests.tests_views.CustomerViewTest) ... ok
 test_create_customer_fail_when_missing_fields (accounts.tests.tests_views.CustomerViewTest) ... ok
 test_create_new_customer (accounts.tests.tests_views.CustomerViewTest) ... ok
-test_login_fail (accounts.tests.tests_views.LoginViewTest) ... ok
-test_login_success (accounts.tests.tests_views.LoginViewTest) ... ok
-test_a_customer_cannot_update_another_user_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
+test_login_fail (accounts.tests.tests_views.LoginCustomerViewTest) ... ok
+test_login_success (accounts.tests.tests_views.LoginCustomerViewTest) ... ok
+test_login_fail (accounts.tests.tests_views.LoginPartnerViewTest) ... ok
+test_login_success (accounts.tests.tests_views.LoginPartnerViewTest) ... ok
+test_create_new_partner (accounts.tests.tests_views.PartnerViewTest) ... ok
+test_create_partner_fail_when_missing_fields (accounts.tests.tests_views.PartnerViewTest) ... ok
+test_create_user_fail_when_cpf_exists (accounts.tests.tests_views.PartnerViewTest) ... ok
+test_a_customer_cannot_update_another_customer_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
 test_anonymous_cannot_search_for_a_specific_customer_by_id (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
 test_anyone_authenticated_can_search_for_a_specific_customer_by_id (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
 test_is_is_not_possible_to_search_for_a_customer_by_id_that_does_not_exist (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
 test_is_is_not_possible_to_update_a_customer_by_id_that_does_not_exist (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
 test_only_the_customer_himself_can_update_his_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
+test_a_partner_cannot_update_another_user_data (accounts.tests.tests_views.UpdatingPartnerTest) ... ok
+test_is_is_not_possible_to_update_a_partner_by_id_that_does_not_exist (accounts.tests.tests_views.UpdatingPartnerTest) ... ok
+test_only_the_partner_himself_can_update_his_data (accounts.tests.tests_views.UpdatingPartnerTest) ... ok
+test_address_field_type (orders.tests.test_model.TestOrderModel) ... ok
+test_address_field_value (orders.tests.test_model.TestOrderModel) ... ok
+test_order_field_type (orders.tests.test_model.TestOrderModel) ... ok
+test_order_field_value (orders.tests.test_model.TestOrderModel) ... ok
+test_residence_field_type (orders.tests.test_model.TestOrderModel) ... ok
+test_residence_field_value (orders.tests.test_model.TestOrderModel) ... ok
+test_service_field_type (orders.tests.test_model.TestOrderModel) ... ok
+test_service_field_value (orders.tests.test_model.TestOrderModel) ... ok
+ERROR
+
+======================================================================
+ERROR: setUpClass (orders.tests.test_views.TestOrdersView)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/testcases.py", line 1201, in setUpClass
+    cls.setUpTestData()
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 47, in setUpTestData
+    cls.residence = ResidenceType.objects.create(dict(name='Casa'))
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+TypeError: create() takes 1 positional argument but 2 were given
 
 ----------------------------------------------------------------------
-Ran 12 tests in 1.105s
+Ran 28 tests in 2.690s
 
-OK
+FAILED (errors=1)
 Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
