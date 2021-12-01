@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
-from accounts.models import Customer, Partner
+from accounts.models import Customer, Partner, User
 from ..models import (
     Order,
     Address,
@@ -16,7 +16,7 @@ class TestOrdersView(APITestCase):
     """
     @classmethod
     def setUpTestData(cls):
-        customer_data = dict(
+        user_to_customer_data = dict(
             full_name="Epchin Bot",
             email="epchinbot@teste.com",
             cpf="11542528330",
@@ -44,40 +44,57 @@ class TestOrdersView(APITestCase):
             cep="82000000"
         )
 
-        cls.residence = ResidenceType.objects.create(dict(name='Casa'))
+        cls.residence = ResidenceType.objects.create(**dict(name='Casa'))
         cls.service = ServiceType.objects.create(
-            dict(name="Limpeza Residencial")
+            **dict(name="Limpeza Residencial")
         )
-        cls.customer = Customer.objects.create(**customer_data)
+        user_costumer = User.objects.create_user(
+            dict(username=user_to_customer_data['email']),
+            **user_to_customer_data
+            )
+        cls.customer = Customer.objects.create(
+            user_customer=user_costumer
+        )
         cls.partner_address = Address.objects.create(**partner_address_data)
         cls.customer_address = Address.objects.create(**customer_address_data)
 
-        partner_data = dict(
-            fullname='partner person',
+        user_to_partner_data = dict(
+            full_name='partner person',
             email='partner@email.com',
             password='1234',
             cpf='17203537510',
-            birthday='01-01-1999',
+            phone="45921541254"
+        )
+
+        user_partner = User.objects.create_user(
+            dict(username=user_to_partner_data['email']),
+            **user_to_partner_data
+        )
+
+        partner_data = dict(
+            user_partner=user_partner,
+            birthday='1999-01-01',
             gender='F',
-            phone='27999944920',
-            address=cls.address,
-            services=cls.service,
+            address=cls.partner_address,
+            service=cls.service,
             describe="beatae nesciunt porro"
         )
 
-        cls.partner = Partner.objects.create(**partner_data)
+        cls.partner = Partner.objects.create(
+            **partner_data
+            )
 
         cls.order_successful_data = dict(
             hours=2,
-            date="01/01/2030",
+            date="2030-01-01",
             bathrooms=2,
             bedrooms=2,
             value=200.00,
-            residence=cls.residence,
-            service=cls.service,
+            residence=cls.residence.name,
+            service=cls.service.name,
             opened=True,
             completed=False,
-            address=cls.customer_address
+            address=customer_address_data
         )
 
         cls.order_without_fields_data = dict(
@@ -93,13 +110,13 @@ class TestOrdersView(APITestCase):
         )
 
         cls.customer_login_data = dict(
-            email=cls.customer.email,
-            password=cls.customer.password
+            username=cls.customer.user_customer.email,
+            password=cls.customer.user_customer.password
         )
 
         cls.partner_login_data = dict(
-            email=cls.partner.email,
-            password=cls.partner.password
+            username=cls.partner.user_partner.email,
+            password=cls.partner.user_partner.password
         )
 
     def test_only_customer_can_create_an_successful_order(self):
@@ -400,7 +417,7 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        token, _ = Token.objects.get_or_create(user=self.customer)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
 
         # Fazendo a criação de uma ordem.
@@ -479,23 +496,27 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         new_order = self.client.post(
             '/api/orders/',
             self.order_successful_data,
-            format='json'
+            format="json"
         )
 
         # Simulando um login de partner.
-        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.partner.user_partner
+            )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Tentando deletar uma ordem
         response = self.client.delete(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.id}/',
             format='json'
         )
 
@@ -534,8 +555,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Tentando deletar uma ordem
         response = self.client.delete(
