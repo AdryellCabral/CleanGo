@@ -23,6 +23,7 @@ class AccountCustomerView(APIView):
             return Response({'message': 'You must inform your email.'}, status=status.HTTP_400_BAD_REQUEST)
         
         data['username'] = data['email']
+        data['is_staff'] = True
 
         data_serializer = UserSerializer(data=request.data)
         if not data_serializer.is_valid():
@@ -108,7 +109,8 @@ class AccountPartnerView(APIView):
 
     def post(self, request):
 
-        data = request.data                     
+        data = request.data  
+        data['is_staff'] = False                   
         
         check_fields = ['email', 'gender', 'birthday', 'describe', 'services', 'address']
         missing_fields = [item for item in check_fields if item not in data]
