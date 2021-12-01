@@ -10,6 +10,7 @@ class UserSerializer(serializers.Serializer):
     full_name = serializers.CharField()
     cpf = serializers.CharField()
     phone = serializers.CharField()
+    is_staff = serializers.BooleanField(write_only=True)
 
 
 class CustomerSerializer(serializers.Serializer):

@@ -14,7 +14,8 @@ class CustomerViewTest(APITestCase):
             'password': '1234',            
             'full_name': 'John Field',
             'cpf': '11111111111',
-            'phone': '999999999'
+            'phone': '999999999',
+            'is_staff': True
         }
    
         response = self.client.post('/api/customers/', customer_data, format='json')
@@ -47,7 +48,8 @@ class CustomerViewTest(APITestCase):
             password = '1234',
             full_name = 'Jonh Field',
             cpf = '11111111111',
-            phone = '999999999'
+            phone = '999999999',
+            is_staff = True
         )
 
         Customer.objects.create(user_customer=user)
@@ -57,7 +59,8 @@ class CustomerViewTest(APITestCase):
             'password': '1234',            
             'full_name': 'John Field',
             'cpf': '11111111111',
-            'phone': '888888888'
+            'phone': '888888888',
+            'is_staff': True
         }
     
         response = self.client.post('/api/customers/', customer_data, format='json')
@@ -73,7 +76,8 @@ class LoginCustomerViewTest(APITestCase):
             password = '1234',
             full_name = 'Jonh Field',
             cpf = '11111111111',
-            phone = '999999999'
+            phone = '999999999',
+            is_staff = True
         )
 
         Customer.objects.create(user_customer=user)
@@ -106,7 +110,7 @@ class LoginCustomerViewTest(APITestCase):
 
 class SeachingAndUpdatingCustomerTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create(username = 'john@mail.com', password = '1234', email = 'john@mail.com', full_name = 'Jonh Field', cpf = '11111111111', phone = '999999999')            
+        self.user = User.objects.create(username = 'john@mail.com', password = '1234', email = 'john@mail.com', full_name = 'Jonh Field', cpf = '11111111111', phone = '999999999', is_staff = True)            
         self.customer = Customer.objects.create(user_customer=self.user)
         self.token = Token.objects.create(user=self.customer.user_customer)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}') 
@@ -200,7 +204,8 @@ class PartnerViewTest(APITestCase):
                 'cep': '82000000'
             },
             'services': 'Limpeza Residencial',
-            'describe': 'Limpeza total em qualquer tipo de residência.'
+            'describe': 'Limpeza total em qualquer tipo de residência.',
+            'is_staff': False
         }
 
         response = self.client.post('/api/partners/', partner_data, format='json')
@@ -238,7 +243,8 @@ class PartnerViewTest(APITestCase):
                 'cep': '82000000'
             },
             'services': 'Limpeza Residencial',
-            'describe': 'Limpeza total em qualquer tipo de residência.'
+            'describe': 'Limpeza total em qualquer tipo de residência.',
+            'is_staff': False
         }
     
         response = self.client.post('/api/partners/', customer_data, format='json')
@@ -253,7 +259,8 @@ class PartnerViewTest(APITestCase):
             password = '1234',            
             full_name = 'John Field',
             cpf = '11111111111',
-            phone = '999999998'
+            phone = '999999998',
+            is_staff = False
         )
 
         service = ServiceType.objects.get(
@@ -298,7 +305,8 @@ class PartnerViewTest(APITestCase):
                 'cep': '82000000'
             },
             'services': 'Limpeza Residencial',
-            'describe': 'Limpeza total em qualquer tipo de residência.'
+            'describe': 'Limpeza total em qualquer tipo de residência.',
+            'is_staff': False
         }
     
         response = self.client.post('/api/partners/', partner_data, format='json')
@@ -314,7 +322,8 @@ class LoginPartnerViewTest(APITestCase):
             password = '1234',            
             full_name = 'John Field',
             cpf = '11111111110',
-            phone = '999999998'
+            phone = '999999998',
+            is_staff = False
         )
 
         service = ServiceType.objects.create(
@@ -374,7 +383,8 @@ class UpdatingPartnerTest(APITestCase):
             password = '1234',            
             full_name = 'John Field',
             cpf = '11111111111',
-            phone = '999999998'
+            phone = '999999998',
+            is_staff = False
         )
 
         self.service = ServiceType.objects.create(
@@ -453,7 +463,8 @@ class UpdatingPartnerTest(APITestCase):
             password = '1234',            
             full_name = 'John Field',
             cpf = '11111111110',
-            phone = '999999990'
+            phone = '999999990',
+            is_staff = False
         )
 
         service_2 = ServiceType.objects.create(
