@@ -19,7 +19,7 @@ class AccountCustomerView(APIView):
 
         data = request.data
                
-        if not data['email']:            
+        if not data.get('email'):            
             return Response({'message': 'You must inform your email.'}, status=status.HTTP_400_BAD_REQUEST)
         
         data['username'] = data['email']

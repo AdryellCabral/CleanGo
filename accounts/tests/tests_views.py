@@ -17,7 +17,7 @@ class CustomerViewTest(APITestCase):
             'phone': '999999999'
         }
    
-        response = self.client.post('/customers/', customer_data, format='json')
+        response = self.client.post('/api/customers/', customer_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['email'], 'john@mail.com')
@@ -35,7 +35,7 @@ class CustomerViewTest(APITestCase):
             'full_name': 'John Field',
         }
     
-        response = self.client.post('/customers/', customer_data, format='json')
+        response = self.client.post('/api/customers/', customer_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -60,12 +60,12 @@ class CustomerViewTest(APITestCase):
             'phone': '888888888'
         }
     
-        response = self.client.post('/customers/', customer_data, format='json')
+        response = self.client.post('/api/customers/', customer_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
 
 
-class LoginViewTest(APITestCase):
+class LoginCustomerViewTest(APITestCase):
     def setUp(self):
         user = User.objects.create_user(
             username = 'john@mail.com',
@@ -86,7 +86,7 @@ class LoginViewTest(APITestCase):
             'is_partner': False
         }
     
-        response = self.client.post('/customers/login/', login_data)
+        response = self.client.post('/api/customers/login/', login_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.json())
@@ -99,7 +99,7 @@ class LoginViewTest(APITestCase):
             'is_partner': False           
         }
     
-        response = self.client.post('/customers/login/', login_data)
+        response = self.client.post('/api/customers/login/', login_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -113,14 +113,14 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
 
             
     def test_anyone_authenticated_can_search_for_a_specific_customer_by_id(self):
-        response = self.client.get(f'/customers/{self.customer.user_customer.id}/', format='json')
+        response = self.client.get(f'/api/customers/{self.customer.id}/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(CustomerSerializer(instance=self.customer).data['user_customer'], response.data)
+        self.assertEqual(CustomerSerializer(instance=self.customer).data, response.data)
 
 
     def test_is_is_not_possible_to_search_for_a_customer_by_id_that_does_not_exist(self): 
-        response = self.client.get(f'/customers/{self.customer.user_customer.id + 1}/', format='json')
+        response = self.client.get(f'/api/customers/{self.customer.id + 1}/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
@@ -128,7 +128,7 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
     def test_anonymous_cannot_search_for_a_specific_customer_by_id(self):
         self.client.force_authenticate(user=None)
 
-        response = self.client.get(f'/customers/{self.customer.user_customer.id}/', format='json')
+        response = self.client.get(f'/api/customers/{self.customer.id}/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -138,7 +138,7 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
             'phone': '888888888'
         }
 
-        response = self.client.patch(f'/customers/{self.customer.user_customer.id}/', customer_data, format='json')
+        response = self.client.patch(f'/api/customers/{self.customer.id}/', customer_data, format='json')
 
         self.customer.refresh_from_db()
 
@@ -153,7 +153,7 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
             'phone': '888888888'
         }
 
-        response = self.client.patch(f'/customers/{self.customer.user_customer.id + 1}/', customer_data, format='json')
+        response = self.client.patch(f'/api/customers/{self.customer.id + 1}/', customer_data, format='json')
         
         self.customer.refresh_from_db()
 
@@ -168,7 +168,7 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
             'phone': '8888888881'
         }
 
-        response = self.client.patch(f'/customers/{customer_2.user_customer.id}/', customer_data, format='json')
+        response = self.client.patch(f'/api/customers/{customer_2.id}/', customer_data, format='json')
 
         customer_2.refresh_from_db()
 
@@ -176,6 +176,10 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
                 
 
 class PartnerViewTest(APITestCase):
+    def setUp(self):
+        ServiceType.objects.create(name='Limpeza Residencial')
+
+
     def test_create_new_partner(self):
         partner_data = {
             'username': 'john@mail.com',
@@ -184,7 +188,7 @@ class PartnerViewTest(APITestCase):
             'full_name': 'John Field',
             'cpf': '11111111111',
             'phone': '999999999',
-            'birthday': '01-01-1999',
+            'birthday': '1999-01-01',
             'gender': 'M',            
             'address':{
                 'place': 'Rua das Araras',
@@ -198,15 +202,15 @@ class PartnerViewTest(APITestCase):
             'services': 'Limpeza Residencial',
             'describe': 'Limpeza total em qualquer tipo de residência.'
         }
-   
-        response = self.client.post('/partners/', partner_data, format='json')
+
+        response = self.client.post('/api/partners/', partner_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['email'], 'john@mail.com')
         self.assertEqual(response.json()['full_name'], 'John Field')
         self.assertEqual(response.json()['cpf'], '11111111111')
         self.assertEqual(response.json()['phone'], '999999999')
-        self.assertEqual(response.json()['birthday'], '01-01-1999')
+        self.assertEqual(response.json()['birthday'], '1999-01-01')
         self.assertEqual(response.json()['gender'], 'M')
         self.assertEqual(response.json()['describe'], 'Limpeza total em qualquer tipo de residência.')
         self.assertEqual(response.json()['service']['name'], 'Limpeza Residencial')
@@ -221,8 +225,8 @@ class PartnerViewTest(APITestCase):
             'email': 'john@mail.com',
             'password': '1234',            
             'full_name': 'John Field',
-            'phone': '999999999',
-            'birthday': '01-01-1999',
+            'phone': '11999999999',
+            'birthday': '1999-01-01',
             'gender': 'M',            
             'address':{
                 'place': 'Rua das Araras',
@@ -237,7 +241,7 @@ class PartnerViewTest(APITestCase):
             'describe': 'Limpeza total em qualquer tipo de residência.'
         }
     
-        response = self.client.post('/partners/', customer_data, format='json')
+        response = self.client.post('/api/partners/', customer_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -256,7 +260,7 @@ class PartnerViewTest(APITestCase):
             name = 'Limpeza Residencial'
         )
 
-        partner_address = Address.objects.get_or_create(
+        partner_address = Address.objects.create(
             place = 'Rua das Araras',
             number = '10',
             neighborhood = 'Vila Norte',
@@ -268,7 +272,7 @@ class PartnerViewTest(APITestCase):
 
         Partner.objects.create(
             user_partner = user,
-            birthday = '01-01-1999',
+            birthday = '1999-01-01',
             gender = 'M',
             describe = 'Limpeza total em qualquer tipo de residência.',
             service = service,
@@ -282,7 +286,7 @@ class PartnerViewTest(APITestCase):
             'full_name': 'John Field',
             'cpf': '11111111111',
             'phone': '999999998',
-            'birthday': '01-01-1999',
+            'birthday': '1999-01-01',
             'gender': 'M',            
             'address':{
                 'place': 'Rua das Araras',
@@ -297,27 +301,27 @@ class PartnerViewTest(APITestCase):
             'describe': 'Limpeza total em qualquer tipo de residência.'
         }
     
-        response = self.client.post('/partners/', partner_data, format='json')
+        response = self.client.post('/api/partners/', partner_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
 
 
-class LoginViewTest(APITestCase):
+class LoginPartnerViewTest(APITestCase):
     def setUp(self):
         user = User.objects.create_user(
             username = 'john2@mail.com',
             email = 'john2@mail.com',
             password = '1234',            
             full_name = 'John Field',
-            cpf = '11111111111',
+            cpf = '11111111110',
             phone = '999999998'
         )
 
-        service = ServiceType.objects.get(
+        service = ServiceType.objects.create(
             name = 'Limpeza Residencial'
         )
 
-        partner_address = Address.objects.get_or_create(
+        partner_address = Address.objects.create(
             place = 'Rua das Araras',
             number = '10',
             neighborhood = 'Vila Norte',
@@ -329,7 +333,7 @@ class LoginViewTest(APITestCase):
 
         Partner.objects.create(
             user_partner = user,
-            birthday = '01-01-1999',
+            birthday = '1999-01-01',
             gender = 'M',
             describe = 'Limpeza total em qualquer tipo de residência.',
             service = service,
@@ -339,12 +343,12 @@ class LoginViewTest(APITestCase):
 
     def test_login_success(self):
         login_data = {
-            'email': 'john@mail.com',
+            'email': 'john2@mail.com',
             'password': '1234',
             'is_partner': True
         }
     
-        response = self.client.post('/partners/login/', login_data)
+        response = self.client.post('/api/partners/login/', login_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.json())
@@ -352,12 +356,12 @@ class LoginViewTest(APITestCase):
 
     def test_login_fail(self):
         login_data = {
-            'email': 'john@mail.com',
+            'email': 'john2@mail.com',
             'password': '123',
             'is_partner': True           
         }
     
-        response = self.client.post('/partners/login/', login_data)
+        response = self.client.post('/api/partners/login/', login_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -365,19 +369,19 @@ class LoginViewTest(APITestCase):
 class UpdatingPartnerTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username = 'john2@mail.com',
-            email = 'john2@mail.com',
+            username = 'john@mail.com',
+            email = 'john@mail.com',
             password = '1234',            
             full_name = 'John Field',
             cpf = '11111111111',
             phone = '999999998'
         )
 
-        self.service = ServiceType.objects.get(
+        self.service = ServiceType.objects.create(
             name = 'Limpeza Residencial'
         )
 
-        self.partner_address = Address.objects.get_or_create(
+        self.partner_address = Address.objects.create(
             place = 'Rua das Araras',
             number = '10',
             neighborhood = 'Vila Norte',
@@ -389,7 +393,7 @@ class UpdatingPartnerTest(APITestCase):
 
         self.partner = Partner.objects.create(
             user_partner = self.user,
-            birthday = '01-01-1999',
+            birthday = '1999-01-01',
             gender = 'M',
             describe = 'Limpeza total em qualquer tipo de residência.',
             service = self.service,
@@ -413,13 +417,13 @@ class UpdatingPartnerTest(APITestCase):
                         }
         }
 
-        response = self.client.patch(f'/partners/{self.partner.user_partner.id}/', partner_data, format='json')
+        response = self.client.patch(f'/api/partners/{self.partner.id}/', partner_data, format='json')
 
         self.partner.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['phone'], '888888888')
-        self.assertEqual(response.json()['address']['name'], 'Rua das Pameiras')
+        self.assertEqual(response.json()['address']['place'], 'Rua das Pameiras')
                     
 
     def test_is_is_not_possible_to_update_a_partner_by_id_that_does_not_exist(self):        
@@ -435,7 +439,7 @@ class UpdatingPartnerTest(APITestCase):
                         }
         }
 
-        response = self.client.patch(f'/partners/{self.partner.user_customer.id + 1}/', partner_data, format='json')
+        response = self.client.patch(f'/api/partners/{self.partner.id + 1}/', partner_data, format='json')
         
         self.partner.refresh_from_db()
 
@@ -448,15 +452,15 @@ class UpdatingPartnerTest(APITestCase):
             email = 'john2@mail.com',
             password = '1234',            
             full_name = 'John Field',
-            cpf = '11111111111',
-            phone = '999999998'
+            cpf = '11111111110',
+            phone = '999999990'
         )
 
-        service_2 = ServiceType.objects.get(
+        service_2 = ServiceType.objects.create(
             name = 'Limpeza Residencial'
         )
 
-        partner_address_2 = Address.objects.get_or_create(
+        partner_address_2 = Address.objects.create(
             place = 'Rua das Araras',
             number = '10',
             neighborhood = 'Vila Norte',
@@ -468,7 +472,7 @@ class UpdatingPartnerTest(APITestCase):
 
         partner_2 = Partner.objects.create(
             user_partner = user_2,
-            birthday = '01-01-1999',
+            birthday = '1999-01-01',
             gender = 'M',
             describe = 'Limpeza total em qualquer tipo de residência.',
             service = service_2,
@@ -479,7 +483,7 @@ class UpdatingPartnerTest(APITestCase):
             'phone': '888888888'
         }
 
-        response = self.client.patch(f'/partners/{partner_2.user_partner.id}/', partner_data, format='json')
+        response = self.client.patch(f'/api/partners/{partner_2.id}/', partner_data, format='json')
 
         partner_2.refresh_from_db()
 

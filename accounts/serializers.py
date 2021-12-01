@@ -65,7 +65,7 @@ class PartnerCheckSerializer(serializers.Serializer):
 
     id = serializers.IntegerField(read_only=True)
     user_partner = UserSerializer()
-    birthday = serializers.CharField()
+    birthday = serializers.DateField()
     gender = serializers.CharField()
     describe = serializers.CharField()
     service = ServiceTypePartnerSerializer()
@@ -79,7 +79,7 @@ class PartnerResponseSerializer(serializers.Serializer):
     email = serializers.EmailField(source='user_partner.email')    
     full_name = serializers.CharField(source='user_partner.full_name')
     cpf = serializers.CharField(source='user_partner.cpf')
-    birthday = serializers.CharField()
+    birthday = serializers.DateField()
     gender = serializers.CharField()
     phone = serializers.CharField(source='user_partner.phone')
     address = AddressPartnerSerializer()
@@ -103,8 +103,7 @@ class PartnerUpdateSerializer(serializers.Serializer):
     address = AddressPartnerSerializer(required=False)
    
     def update(self, instance, validated_data):
-        print(validated_data)
-        print('teste')
+
         if validated_data.get('user_partner'):           
             instance.user_partner.username = validated_data.get('user_partner', instance.user_partner.username).get('username', instance.user_partner.username)
             instance.user_partner.email = validated_data.get('user_partner', instance.user_partner.email).get('email', instance.user_partner.email)
