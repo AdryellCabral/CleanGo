@@ -1,6 +1,5 @@
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-import ipdb
 
 from accounts.models import Customer, Partner, User
 from ..models import (
