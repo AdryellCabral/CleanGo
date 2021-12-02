@@ -1,9 +1,10 @@
 from rest_framework.permissions import BasePermission
 
-super_methods = ["PATCH", "PUT", "POST", "DELETE"]
+super_methods = ["PUT", "POST", "DELETE"]
 
 
 class IsCustomerOrReadOnly(BasePermission):
+
     def has_permission(self, request, view):
         if request.method in super_methods:
             return request.user.is_staff
