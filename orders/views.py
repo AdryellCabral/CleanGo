@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from accounts.models import Customer
+from accounts.models import Customer, Partner
 from orders.permissions import IsCustomerOrReadOnly
 from orders.serializers import OrderSerializer
 from orders.models import Order, ServiceType, Address, ResidenceType
@@ -64,7 +64,15 @@ class OrdersRetrieveUpdateDeleteView(APIView):
 
     def patch(self, request,order_id):
         try:
+            user = request.user
             order = Order.objects.get(id=order_id)
+
+            try:
+                partner = Partner.objects.get(user_partner=user.id)
+                order.partner = partner         
+            except:
+                pass 
+
             order_serializer = OrderSerializer(order,data=request.data,partial=True)
             if not order_serializer.is_valid():
                 return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
