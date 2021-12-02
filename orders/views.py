@@ -14,12 +14,19 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class OrdersView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCustomerOrReadOnly]
 
     def post(self, request):
         user = request.user
         request.data['partner'] = None
         data = request.data
+
+        check_fields = ['residence', 'address', 'service']
+        missing_fields = [item for item in check_fields if item not in data]
+        if missing_fields:
+            miss = str(missing_fields)[1:-1]
+            return Response({'message': f'Missing fields: {miss}'}, status=status.HTTP_400_BAD_REQUEST)
+                
         data_residence = data.pop('residence')
         data_address = data.pop('address')
         data_service = data.pop('service')

@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
+import ipdb
 
 from accounts.models import Customer, Partner, User
 from ..models import (
@@ -17,11 +18,13 @@ class TestOrdersView(APITestCase):
     @classmethod
     def setUpTestData(cls):
         user_to_customer_data = dict(
+            username="epchinbot@teste.com",
             full_name="Epchin Bot",
             email="epchinbot@teste.com",
             cpf="11542528330",
             password="123456",
-            phone="45921541253"
+            phone="45921541253",
+            is_staff = True
         )
 
         partner_address_data = dict(
@@ -49,7 +52,6 @@ class TestOrdersView(APITestCase):
             **dict(name="Limpeza Residencial")
         )
         user_costumer = User.objects.create_user(
-            dict(username=user_to_customer_data['email']),
             **user_to_customer_data
             )
         cls.customer = Customer.objects.create(
@@ -59,6 +61,7 @@ class TestOrdersView(APITestCase):
         cls.customer_address = Address.objects.create(**customer_address_data)
 
         user_to_partner_data = dict(
+            username = 'partner@email.com',
             full_name='partner person',
             email='partner@email.com',
             password='1234',
@@ -68,7 +71,6 @@ class TestOrdersView(APITestCase):
         )
 
         user_partner = User.objects.create_user(
-            dict(username=user_to_partner_data['email']),
             **user_to_partner_data
         )
 
@@ -100,23 +102,60 @@ class TestOrdersView(APITestCase):
 
         cls.order_without_fields_data = dict(
             hours=2,
-            date="01/01/2030",
+            date="2030-01-01",
             bathrooms=2,
             bedrooms=2,
             value=200.00,
-            residence=cls.residence,
-            service=cls.service,
+            residence=cls.residence.name,
+            service=cls.service.name,
             opened=True,
             completed=False,
         )
 
+        cls.list_order_successful_data = [dict(
+            id=1,
+            hours=2,
+            date="2030-01-01",
+            bathrooms=2,
+            bedrooms=2,
+            value=200.00,
+            residence=dict(
+                id=1,
+                name="Casa"
+            ),
+            service=dict(
+                id=1,
+                name="Limpeza Residencial"
+            ),
+            opened=True,
+            completed=False,
+            address=dict(
+                id=2,
+                place="Rua dos bots",
+                number="123A",
+                neighborhood="Bairro dos bots",
+                complements="",
+                city="Cidade dos bots",
+                state="SP",
+                cep="82000000"
+            ),
+            customer=dict(
+                id=1,
+                full_name="Epchin Bot",
+                email="epchinbot@teste.com",
+                cpf="11542528330",
+                phone="45921541253",
+            ),
+            partner=None
+        )]  
+
         cls.customer_login_data = dict(
-            username=cls.customer.user_customer.email,
+            username=cls.customer.user_customer.username,
             password=cls.customer.user_customer.password
         )
 
         cls.partner_login_data = dict(
-            username=cls.partner.user_partner.email,
+            username=cls.partner.user_partner.username,
             password=cls.partner.user_partner.password
         )
 
@@ -127,8 +166,8 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(user=self.customer.user_customer)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
@@ -154,8 +193,8 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de partner
-        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+        token, _ = Token.objects.get_or_create(user=self.partner.user_partner)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
@@ -179,13 +218,13 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(user=self.customer.user_customer)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
             '/api/orders/',
-            self.order_successful_data,
+            self.order_without_fields_data,
             format='json'
         )
 
@@ -193,11 +232,7 @@ class TestOrdersView(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertDictEqual(
             response.json(),
-            dict(
-                address=[
-                    "This field is required."
-                    ]
-            )
+            {'message': "Missing fields: 'address'"}
         )
 
     def test_get_order_without_authentication(self):
@@ -227,29 +262,28 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(user=self.customer.user_customer)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
             '/api/orders/',
             self.order_successful_data,
             format='json'
-        )
+        )       
 
         # Fazendo o request get de uma ordem.
         response = self.client.get(
-            '/api/orders/',
-            self.order_successful_data,
-            format='json'
+            '/api/orders/'          
         )
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Order.object.all()), len(response.data))
-        self.assertEqual(
-            response.data[0].pop('id'),
-            self.order_successful_data
+        self.assertEquals(len(Order.objects.all()), len(response.data))
+
+        self.assertListEqual(
+            response.json(),
+            self.list_order_successful_data
         )
 
     def test_get_order_successful_with_partner_authentication(self):
