@@ -58,6 +58,9 @@ class CustomerModelTest(TestCase):
 
 
     def test_customer_fields(self):
+        """
+        Teste para verificar os tipos e valores dos campos de customer
+        """
         self.assertIsInstance(self.customer.user_customer, User)
 
         self.assertIsInstance(self.customer.user_customer.username, str)
@@ -78,6 +81,9 @@ class CustomerModelTest(TestCase):
         self.assertEqual(self.customer.user_customer.phone, self.phone)
 
     def test_partner_table_fields(self):
+        """
+        Teste para verificar os tipos e valores dos campos de partner
+        """
 
         partner = Partner.objects.get(id=self.partner.id)
 

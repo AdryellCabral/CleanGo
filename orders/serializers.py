@@ -65,4 +65,3 @@ class OrderSerializer(serializers.Serializer):
             instance.opened = validated_data.get('opened', instance.opened)
             instance.save()
             return instance
-

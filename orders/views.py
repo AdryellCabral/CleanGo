@@ -1,10 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from accounts.serializers import UserSerializer, CustomerSerializer 
-from accounts.models import User, Customer, Partner
+from accounts.models import Customer
 from orders.permissions import IsCustomerOrReadOnly
-from orders.serializers import OrderSerializer, ServiceTypeSerializer, AddressSerializer, ResidenceTypeSerializer
+from orders.serializers import OrderSerializer
 from orders.models import Order, ServiceType, Address, ResidenceType
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -66,7 +65,7 @@ class OrdersRetrieveUpdateDeleteView(APIView):
     def patch(self, request,order_id):
         try:
             order = Order.objects.get(id=order_id)
-            order_serializer = OrderSerializer(order,data=request.data)
+            order_serializer = OrderSerializer(order,data=request.data,partial=True)
             if not order_serializer.is_valid():
                 return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             order_serializer.save()
