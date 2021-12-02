@@ -1,5 +1,7 @@
 from rest_framework import serializers
-
+from orders.models import Address, ServiceType
+from accounts.models import User
+import re
 
 class UserSerializer(serializers.Serializer):
 
@@ -11,6 +13,14 @@ class UserSerializer(serializers.Serializer):
     cpf = serializers.CharField()
     phone = serializers.CharField()
     is_staff = serializers.BooleanField(write_only=True)
+    
+  
+    # def validate(self, attrs):
+    #     cpf = attrs['cpf']
+    #     if re.fullmatch(r'^\[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$', cpf) != None:
+    #         return attrs                
+    #     else:
+    #         raise PhoneFormatError('Phone must be informed in the following format: (xx)9xxxx-xxxx.')
 
 
 class CustomerSerializer(serializers.Serializer):
@@ -114,19 +124,13 @@ class PartnerUpdateSerializer(serializers.Serializer):
             instance.user_partner.phone = validated_data.get('user_partner', instance.user_partner.phone).get('phone', instance.user_partner.phone)
             instance.user_partner.save()
         
-        if validated_data.get('address'):  
-            instance.address.place = validated_data.get('address', instance.address.place).get('place', instance.address.place)
-            instance.address.number = validated_data.get('address', instance.address.number).get('number', instance.address.number)
-            instance.address.neighborhood = validated_data.get('address', instance.address.neighborhood).get('neighborhood', instance.address.neighborhood)
-            instance.address.complements = validated_data.get('address', instance.address.complements).get('complements', instance.address.complements)
-            instance.address.city = validated_data.get('address', instance.address.city).get('city', instance.address.city)
-            instance.address.state = validated_data.get('address', instance.address.state).get('state', instance.address.state)
-            instance.address.cep = validated_data.get('address', instance.address.cep).get('cep', instance.address.cep)
-            instance.address.save()
+        if validated_data.get('address'):
+            new_address = Address.objects.get(**validated_data['address'])  
+            instance.address = new_address
         
-        if validated_data.get('service'):  
-            instance.service.name = validated_data.get('service', instance.service.name).get('name', instance.service.name)
-            instance.service.save()
+        if validated_data.get('service'):
+            new_service = ServiceType.objects.get(**validated_data['service'])  
+            instance.service = new_service
 
         instance.gender = validated_data.get('gender', instance.gender)
         instance.birthday = validated_data.get('birthday', instance.birthday)
