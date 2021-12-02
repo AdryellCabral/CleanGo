@@ -63,5 +63,6 @@ class OrderSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
             instance.completed = validated_data.get('completed', instance.completed)
             instance.opened = validated_data.get('opened', instance.opened)
+            instance.partner = validated_data.get('partner', instance.partner)
             instance.save()
             return instance
