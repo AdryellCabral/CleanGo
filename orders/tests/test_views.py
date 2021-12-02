@@ -1,3 +1,4 @@
+import ipdb
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
@@ -23,7 +24,7 @@ class TestOrdersView(APITestCase):
             cpf="11542528330",
             password="123456",
             phone="45921541253",
-            is_staff = True
+            is_staff=True
         )
 
         partner_address_data = dict(
@@ -60,7 +61,7 @@ class TestOrdersView(APITestCase):
         cls.customer_address = Address.objects.create(**customer_address_data)
 
         user_to_partner_data = dict(
-            username = 'partner@email.com',
+            username='partner@email.com',
             full_name='partner person',
             email='partner@email.com',
             password='1234',
@@ -293,9 +294,9 @@ class TestOrdersView(APITestCase):
         Teste de request get bem sucedido de ordem logado com partner.
         """
 
-        # Simulando um login de partner.
+        # Simulando um login de customer.
         token, _ = Token.objects.get_or_create(
-            user=self.partner.user_partner
+            user=self.customer.user_customer
         )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
@@ -305,6 +306,12 @@ class TestOrdersView(APITestCase):
             self.order_successful_data,
             format='json'
         )
+
+        # Simulando um login de partner.
+        token, _ = Token.objects.get_or_create(
+            user=self.partner.user_partner
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo o request get de uma ordem.
         response = self.client.get(
@@ -328,7 +335,7 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o request get de uma ordem.
         response = self.client.get(
-            '/api/orders/1',
+            '/api/orders/1/',
             self.order_successful_data,
             format='json'
         )
@@ -440,13 +447,12 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o request path para aceitar a ordem.
         response = self.client.patch(
-            f'/api/orders/{new_order.data["id"]}',
-            dict(opened=False),
+            f'/api/orders/{new_order.data["id"]}/',
+            dict(
+                opened=False,
+                ),
             format='json'
         )
-
-        # Fazendo update direto no banco.
-        new_order.refresh_from_db()
 
         # Simulando um login de customer.
         token, _ = Token.objects.get_or_create(
@@ -456,43 +462,17 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o request path para completar a ordem.
         response = self.client.patch(
-            f'/api/orders/{new_order.data["id"]}',
-            dict(completed=True),
+            f'/api/orders/{new_order.data["id"]}/',
+            dict(
+                completed=True
+            ),
             format='json'
         )
 
         # Fazendo os testes de aceite da ordem.
         self.assertEquals(200, response.status_code)
-        self.assertEquals(False, response.opened)
-        self.assertEquals(True, response.completed)
-
-    def test_unsuccessful_order_accept_by_customer(self):
-        """
-        teste de update para aceitar a ordem com usuário customer
-        """
-
-        # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(
-            user=self.customer.user_customer
-            )
-        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
-
-        # Fazendo a criação de uma ordem.
-        new_order = self.client.post(
-            '/api/orders/',
-            self.order_successful_data,
-            format='json'
-        )
-
-        # Fazendo o request path da order.
-        response = self.client.patch(
-            f'/api/orders/{new_order.data["id"]}',
-            dict(opened=False),
-            format='json'
-        )
-
-        # Fazendo os testes de aceite da ordem
-        self.assertEquals(400, response.status_code)
+        self.assertEquals(False, response.json()["opened"])
+        self.assertEquals(True, response.json()["completed"])
 
     def test_unsuccessful_order_accept_by_anonymous(self):
         """
@@ -517,7 +497,7 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o request path da order.
         response = self.client.patch(
-            f'/api/orders/{new_order.data["id"]}',
+            f'/api/orders/{new_order.data["id"]}/',
             dict(opened=False),
             format='json'
         )
@@ -545,7 +525,7 @@ class TestOrdersView(APITestCase):
 
         # Deletando uma ordem
         response = self.client.delete(
-            f'/api/orders/{new_order.data["id"]}',
+            f'/api/orders/{new_order.data["id"]}/',
             format='json'
         )
 
@@ -561,7 +541,6 @@ class TestOrdersView(APITestCase):
             user=self.partner.user_partner
             )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
-        print("Token Partner", token)
 
         # Tentando deletar uma ordem
         response = self.client.delete(
