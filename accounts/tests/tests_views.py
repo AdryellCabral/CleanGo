@@ -213,9 +213,6 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
                 
 
 class PartnerViewTest(APITestCase):
-    def setUp(self):
-        ServiceType.objects.create(name='Limpeza Residencial')
-
 
     def test_create_new_partner(self):
         """
