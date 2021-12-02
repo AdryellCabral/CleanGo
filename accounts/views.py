@@ -116,7 +116,7 @@ class AccountPartnerView(APIView):
         missing_fields = [item for item in check_fields if item not in data]
         if missing_fields:
             miss = str(missing_fields)[1:-1]
-            return Response({'message': f'Missing fields: {miss}'}, status=status.HTTP_409_CONFLICT)
+            return Response({'message': f'Missing fields: {miss}'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:    
             data['username'] = data['email']           

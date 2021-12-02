@@ -29,3 +29,19 @@ class Order(models.Model):
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE, blank=True, null=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     service = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
+
+    # def __init__(self, id, hours, date, bathrooms, bedrooms, value, completed, opened, residence, customer, partner, address, service):
+    #     self.id = id
+    #     self.hours = hours
+    #     self.date = date
+    #     self.bathrooms = bathrooms
+    #     self.bedrooms = bedrooms
+    #     self.value = value
+    #     self.completed = completed
+    #     self.opened = opened
+    #     self.residence = residence
+    #     self.customer = customer
+    #     self.partner = partner
+    #     self.address = address
+    #     self.service = service
+
