@@ -32,37 +32,67 @@ Running migrations:
   Applying authtoken.0001_initial... OK
   Applying authtoken.0002_auto_20160226_1747... OK
   Applying authtoken.0003_tokenproxy... OK
+  Applying orders.0002_auto_20211202_1900... OK
   Applying sessions.0001_initial... OK
 System check identified no issues (0 silenced).
-test_customer_fields (accounts.tests.tests_models.CustomerModelTest) ... ok
-test_partner_table_fields (accounts.tests.tests_models.CustomerModelTest) ... ok
-test_create_customer_fail_when_cpf_exists (accounts.tests.tests_views.CustomerViewTest) ... ok
-test_create_customer_fail_when_missing_fields (accounts.tests.tests_views.CustomerViewTest) ... ok
-test_create_new_customer (accounts.tests.tests_views.CustomerViewTest) ... ok
-test_login_fail (accounts.tests.tests_views.LoginCustomerViewTest) ... ok
-test_login_success (accounts.tests.tests_views.LoginCustomerViewTest) ... ok
-test_login_fail (accounts.tests.tests_views.LoginPartnerViewTest) ... ok
-test_login_success (accounts.tests.tests_views.LoginPartnerViewTest) ... ok
-test_create_new_partner (accounts.tests.tests_views.PartnerViewTest) ... ok
-test_create_partner_fail_when_missing_fields (accounts.tests.tests_views.PartnerViewTest) ... ok
-test_create_user_fail_when_cpf_exists (accounts.tests.tests_views.PartnerViewTest) ... ok
-test_a_customer_cannot_update_another_customer_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
-test_anonymous_cannot_search_for_a_specific_customer_by_id (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
-test_anyone_authenticated_can_search_for_a_specific_customer_by_id (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
-test_is_is_not_possible_to_search_for_a_customer_by_id_that_does_not_exist (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
-test_is_is_not_possible_to_update_a_customer_by_id_that_does_not_exist (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
-test_only_the_customer_himself_can_update_his_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest) ... ok
-test_a_partner_cannot_update_another_user_data (accounts.tests.tests_views.UpdatingPartnerTest) ... ok
-test_is_is_not_possible_to_update_a_partner_by_id_that_does_not_exist (accounts.tests.tests_views.UpdatingPartnerTest) ... ok
-test_only_the_partner_himself_can_update_his_data (accounts.tests.tests_views.UpdatingPartnerTest) ... ok
-test_address_field_type (orders.tests.test_model.TestOrderModel) ... ok
-test_address_field_value (orders.tests.test_model.TestOrderModel) ... ok
-test_order_field_type (orders.tests.test_model.TestOrderModel) ... ok
-test_order_field_value (orders.tests.test_model.TestOrderModel) ... ok
-test_residence_field_type (orders.tests.test_model.TestOrderModel) ... ok
-test_residence_field_value (orders.tests.test_model.TestOrderModel) ... ok
-test_service_field_type (orders.tests.test_model.TestOrderModel) ... ok
-test_service_field_value (orders.tests.test_model.TestOrderModel) ... ok
+test_customer_fields (accounts.tests.tests_models.CustomerModelTest)
+Teste para verificar os tipos e valores dos campos de customer ... ok
+test_partner_table_fields (accounts.tests.tests_models.CustomerModelTest)
+Teste para verificar os tipos e valores dos campos de partner ... ok
+test_create_customer_fail_when_cpf_exists (accounts.tests.tests_views.CustomerViewTest)
+Teste para criação falha por cpf já cadastrado ... ok
+test_create_customer_fail_when_missing_fields (accounts.tests.tests_views.CustomerViewTest)
+Teste para criação falha por falta de campos de um usuário customer ... ok
+test_create_new_customer (accounts.tests.tests_views.CustomerViewTest)
+Teste para criação de um usuário customer ... ok
+test_login_fail (accounts.tests.tests_views.LoginCustomerViewTest)
+Teste para login falho ... ok
+test_login_success (accounts.tests.tests_views.LoginCustomerViewTest)
+Teste para login de usuário ... ok
+test_login_fail (accounts.tests.tests_views.LoginPartnerViewTest)
+Teste login falho. ... ok
+test_login_success (accounts.tests.tests_views.LoginPartnerViewTest)
+Teste login sucedido ... ok
+test_create_new_partner (accounts.tests.tests_views.PartnerViewTest)
+Teste criação de conta de partner ... ok
+test_create_partner_fail_when_missing_fields (accounts.tests.tests_views.PartnerViewTest)
+Teste criação de conta de partner deve falhar caso campos faltantes ... ok
+test_create_user_fail_when_cpf_exists (accounts.tests.tests_views.PartnerViewTest)
+Teste criação de conta de partner deve falhar caso cpf já esteja registrado. ... ok
+test_a_customer_cannot_update_another_customer_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest)
+Teste busca por customer específico necessita de autenticação ... ok
+test_anonymous_cannot_search_for_a_specific_customer_by_id (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest)
+Teste busca por customer específico necessita de autenticação ... ok
+test_anyone_authenticated_can_search_for_a_specific_customer_by_id (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest)
+Teste busca por customer específico por id necessita de autenticação ... ok
+test_is_is_not_possible_to_search_for_a_customer_by_id_that_does_not_exist (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest)
+Teste busca falha por customer que não existe ... ok
+test_is_is_not_possible_to_update_a_customer_by_id_that_does_not_exist (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest)
+Teste atualização de dados de um customer inexistente deve falhar ... ok
+test_only_the_customer_himself_can_update_his_data (accounts.tests.tests_views.SeachingAndUpdatingCustomerTest)
+Teste apenas o próprio customer pode atualizar os próprios dados ... ok
+test_a_partner_cannot_update_another_user_data (accounts.tests.tests_views.UpdatingPartnerTest)
+Teste é impossivel atualizar dados de um outro usuário ... ok
+test_is_is_not_possible_to_update_a_partner_by_id_that_does_not_exist (accounts.tests.tests_views.UpdatingPartnerTest)
+Teste é impossivel atualizar dados de um partner inexistente ... ok
+test_only_the_partner_himself_can_update_his_data (accounts.tests.tests_views.UpdatingPartnerTest)
+Teste apenas o próprio partner pode atualizar os próprios dados ... ok
+test_address_field_type (orders.tests.test_model.TestOrderModel)
+Teste para verificar os tipos dos campos de address ... ok
+test_address_field_value (orders.tests.test_model.TestOrderModel)
+Teste para verificar os valores dos campos de address ... ok
+test_order_field_type (orders.tests.test_model.TestOrderModel)
+Teste para verificar os tipos dos campos de order ... ok
+test_order_field_value (orders.tests.test_model.TestOrderModel)
+Teste para verificar os valores dos campos de order ... ok
+test_residence_field_type (orders.tests.test_model.TestOrderModel)
+Teste para verificar os tipos dos campos de residence ... ok
+test_residence_field_value (orders.tests.test_model.TestOrderModel)
+Teste para verificar os valores dos campos de residence ... ok
+test_service_field_type (orders.tests.test_model.TestOrderModel)
+Teste para verificar os tipos dos campos de service ... ok
+test_service_field_value (orders.tests.test_model.TestOrderModel)
+Teste para verificar os valores dos campos de service ... ok
 test_create_an_order_with_invalid_token (orders.tests.test_views.TestOrdersView)
 Tentativa de criação com um token que ... ok
 test_create_an_order_without_fields (orders.tests.test_views.TestOrdersView)
@@ -76,23 +106,21 @@ Teste de request get bem sucedido de ordem logado com partner. ... ERROR
 test_get_order_by_id_unsuccessful_without_authentication (orders.tests.test_views.TestOrdersView)
 Teste de request get por id da order sem autenticação. ... ok
 test_get_order_successful_with_customer_authentication (orders.tests.test_views.TestOrdersView)
-Teste de request get bem sucedido de ordem logado com customer. ... ok
+Teste de request get bem sucedido de ordem logado com customer. ... ERROR
 test_get_order_successful_with_partner_authentication (orders.tests.test_views.TestOrdersView)
 Teste de request get bem sucedido de ordem logado com partner. ... ERROR
 test_get_order_without_authentication (orders.tests.test_views.TestOrdersView)
 Teste mal sucedido por não estar autenticado. ... ok
 test_only_customer_can_create_an_successful_order (orders.tests.test_views.TestOrdersView)
-Aqui a criação de ordem será bem sucedida, ... FAIL
+Aqui a criação de ordem será bem sucedida, ... ERROR
 test_order_accepted_by_partner_and_completed_by_customer (orders.tests.test_views.TestOrdersView)
 teste de update para aceitar a ordem e completa-la ... ERROR
 test_unsuccessful_order_accept_by_anonymous (orders.tests.test_views.TestOrdersView)
 teste de update para aceitar a ordem com o usuário anônimo ... ERROR
-test_unsuccessful_order_accept_by_customer (orders.tests.test_views.TestOrdersView)
-teste de update para aceitar a ordem com usuário customer ... ERROR
 test_unsuccessful_order_deleted_by_anonymous (orders.tests.test_views.TestOrdersView)
 Teste mal sucedido de deletar uma ordem pelo anônimo ... ERROR
 test_unsuccessful_order_deleted_by_partner (orders.tests.test_views.TestOrdersView)
-Teste mal sucedido de deletar uma ordem pelo parceiro ... FAIL
+Teste mal sucedido de deletar uma ordem pelo parceiro ... ok
 test_unsuccessful_order_not_found (orders.tests.test_views.TestOrdersView)
 Teste mal sucedido por não achar o id da ordem ... ok
 
@@ -101,348 +129,426 @@ ERROR: test_delete_order_by_customer (orders.tests.test_views.TestOrdersView)
 Teste para deletar as ordens, só podem ser deletadas pelo customer
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 510, in test_delete_order_by_customer
-    token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 520, in test_delete_order_by_customer
+    new_order = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'epchinbot@teste.com', 'password': 'pbkdf2_sha256$260000$tJ4lKKh2TyxwNiITAcYKNI$dtj+V3SpM7GizimO8qpvMZ4Aw+/DzrLQ70W3WOVWt2s='}.
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ======================================================================
 ERROR: test_get_order_by_id_successful_with_customer_authentication (orders.tests.test_views.TestOrdersView)
 Teste de request get bem sucedido de ordem logado com customer.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 347, in test_get_order_by_id_successful_with_customer_authentication
-    token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 364, in test_get_order_by_id_successful_with_customer_authentication
+    response = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'epchinbot@teste.com', 'password': 'pbkdf2_sha256$260000$tJ4lKKh2TyxwNiITAcYKNI$dtj+V3SpM7GizimO8qpvMZ4Aw+/DzrLQ70W3WOVWt2s='}.
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ======================================================================
 ERROR: test_get_order_by_id_successful_with_partner_authentication (orders.tests.test_views.TestOrdersView)
 Teste de request get bem sucedido de ordem logado com partner.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 378, in test_get_order_by_id_successful_with_partner_authentication
-    token, _ = Token.objects.get_or_create(user=self.partner_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 397, in test_get_order_by_id_successful_with_partner_authentication
+    response = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'partner@email.com', 'password': 'pbkdf2_sha256$260000$WAcIUrtjBKGTHo4uVVp1ri$O5D5Cf/SWG2mlzIFYx9eYAGNy65pL3AbVqnbNwTbwQg='}.
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
+
+======================================================================
+ERROR: test_get_order_successful_with_customer_authentication (orders.tests.test_views.TestOrdersView)
+Teste de request get bem sucedido de ordem logado com customer.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 272, in test_get_order_successful_with_customer_authentication
+    response = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ======================================================================
 ERROR: test_get_order_successful_with_partner_authentication (orders.tests.test_views.TestOrdersView)
 Teste de request get bem sucedido de ordem logado com partner.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 295, in test_get_order_successful_with_partner_authentication
-    token, _ = Token.objects.get_or_create(user=self.partner_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 304, in test_get_order_successful_with_partner_authentication
+    response = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'partner@email.com', 'password': 'pbkdf2_sha256$260000$WAcIUrtjBKGTHo4uVVp1ri$O5D5Cf/SWG2mlzIFYx9eYAGNy65pL3AbVqnbNwTbwQg='}.
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
+
+======================================================================
+ERROR: test_only_customer_can_create_an_successful_order (orders.tests.test_views.TestOrdersView)
+Aqui a criação de ordem será bem sucedida,
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 175, in test_only_customer_can_create_an_successful_order
+    response = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ======================================================================
 ERROR: test_order_accepted_by_partner_and_completed_by_customer (orders.tests.test_views.TestOrdersView)
 teste de update para aceitar a ordem e completa-la
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 409, in test_order_accepted_by_partner_and_completed_by_customer
-    token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 436, in test_order_accepted_by_partner_and_completed_by_customer
+    new_order = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'epchinbot@teste.com', 'password': 'pbkdf2_sha256$260000$tJ4lKKh2TyxwNiITAcYKNI$dtj+V3SpM7GizimO8qpvMZ4Aw+/DzrLQ70W3WOVWt2s='}.
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ======================================================================
 ERROR: test_unsuccessful_order_accept_by_anonymous (orders.tests.test_views.TestOrdersView)
 teste de update para aceitar a ordem com o usuário anônimo
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 481, in test_unsuccessful_order_accept_by_anonymous
-    token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 489, in test_unsuccessful_order_accept_by_anonymous
+    new_order = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'epchinbot@teste.com', 'password': 'pbkdf2_sha256$260000$tJ4lKKh2TyxwNiITAcYKNI$dtj+V3SpM7GizimO8qpvMZ4Aw+/DzrLQ70W3WOVWt2s='}.
-
-======================================================================
-ERROR: test_unsuccessful_order_accept_by_customer (orders.tests.test_views.TestOrdersView)
-teste de update para aceitar a ordem com usuário customer
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 455, in test_unsuccessful_order_accept_by_customer
-    token, _ = Token.objects.get_or_create(user=self.customer)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
-    return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1320, in build_filter
-    self.check_related_objects(join_info.final_field, value, join_info.opts)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1147, in check_related_objects
-    self.check_query_object_type(value, opts, field)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1128, in check_query_object_type
-    raise ValueError(
-ValueError: Cannot query "Customer object (1)": Must be "User" instance.
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ======================================================================
 ERROR: test_unsuccessful_order_deleted_by_anonymous (orders.tests.test_views.TestOrdersView)
 Teste mal sucedido de deletar uma ordem pelo anônimo
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1823, in get_prep_value
-    return int(value)
-TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 554, in test_unsuccessful_order_deleted_by_anonymous
-    token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 565, in test_unsuccessful_order_deleted_by_anonymous
+    new_order = self.client.post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 295, in post
+    response = super().post(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 209, in post
+    return self.generic('POST', path, data, content_type, **extra)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 233, in generic
+    return super().generic(
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 473, in generic
+    return self.request(**r)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 285, in request
+    return super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/test.py", line 237, in request
+    request = super().request(**kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 719, in request
+    self.check_exception(response)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/test/client.py", line 580, in check_exception
+    raise exc_value
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/views.py", line 33, in post
+    residence = ResidenceType.objects.get(name=data_residence)
   File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
     return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 581, in get_or_create
-    return self.get(**kwargs), False
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
-    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
-    return self._filter_or_exclude(False, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
-    clone._filter_or_exclude_inplace(negate, args, kwargs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
-    self._query.add_q(Q(*args, **kwargs))
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
-    clause, _ = self._add_q(q_object, self.used_aliases)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
-    child_clause, needed_inner = self.build_filter(
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1347, in build_filter
-    condition = self.build_lookup(lookups, col, value)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1193, in build_lookup
-    lookup = lookup_class(lhs, rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/lookups.py", line 25, in __init__
-    self.rhs = self.get_prep_lookup()
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 117, in get_prep_lookup
-    self.rhs = target_field.get_prep_value(self.rhs)
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 1825, in get_prep_value
-    raise e.__class__(
-TypeError: Field 'id' expected a number but got {'username': 'epchinbot@teste.com', 'password': 'pbkdf2_sha256$260000$tJ4lKKh2TyxwNiITAcYKNI$dtj+V3SpM7GizimO8qpvMZ4Aw+/DzrLQ70W3WOVWt2s='}.
-
-======================================================================
-FAIL: test_only_customer_can_create_an_successful_order (orders.tests.test_views.TestOrdersView)
-Aqui a criação de ordem será bem sucedida,
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 181, in test_only_customer_can_create_an_successful_order
-    self.assertDictEqual(
-AssertionError: {'id'[82 chars].0, 'completed': False, 'opened': True, 'custo[406 chars]al'}} != {'id'[82 chars].0, 'residence': 'Casa', 'service': 'Limpeza R[214 chars]00'}}
-Diff is 869 characters long. Set self.maxDiff to None to see it.
-
-======================================================================
-FAIL: test_unsuccessful_order_deleted_by_partner (orders.tests.test_views.TestOrdersView)
-Teste mal sucedido de deletar uma ordem pelo parceiro
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/orders/tests/test_views.py", line 546, in test_unsuccessful_order_deleted_by_partner
-    self.assertEqual(403, response.status_code)
-AssertionError: 403 != 404
+  File "/home/mcromao/kenzie/q4/sprint3/capstone/cleango-django/venv/lib/python3.9/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ----------------------------------------------------------------------
-Ran 45 tests in 3.726s
+Ran 44 tests in 3.075s
 
-FAILED (failures=2, errors=8)
+FAILED (errors=9)
 Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
-Token Partner 026c96e0eb4865d04ed2cad84f64cec245a982c7
