@@ -73,6 +73,9 @@ class TestOrderModel(TestCase):
         )
 
     def test_order_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de order
+        """
         self.assertIsInstance(self.order.hours, int)
         self.assertIsInstance(self.order.date, date)
         self.assertIsInstance(self.order.bathrooms, int)
@@ -82,6 +85,9 @@ class TestOrderModel(TestCase):
         self.assertIsInstance(self.order.completed, bool)
     
     def test_order_field_value(self):
+        """
+        Teste para verificar os valores dos campos de order
+        """
         self.assertEqual(self.order.hours, self.hours)
         self.assertEqual(self.order.date, self.date)
         self.assertEqual(self.order.bathrooms, self.bathrooms)
@@ -91,18 +97,33 @@ class TestOrderModel(TestCase):
         self.assertEqual(self.order.completed, self.completed)
 
     def test_service_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de service
+        """
         self.assertIsInstance(self.service.name, str)
 
     def test_service_field_value(self):
+        """
+        Teste para verificar os valores dos campos de service
+        """
         self.assertEqual(self.service.name, self.serviceName)
 
     def test_residence_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de residence
+        """
         self.assertIsInstance(self.residence.name, str)
 
     def test_residence_field_value(self):
+        """
+        Teste para verificar os valores dos campos de residence
+        """
         self.assertEqual(self.residence.name, self.residenceName)
 
     def test_address_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de address
+        """
         self.assertIsInstance(self.address.place, str)
         self.assertIsInstance(self.address.number, str)
         self.assertIsInstance(self.address.neighborhood, str)
@@ -112,6 +133,9 @@ class TestOrderModel(TestCase):
         self.assertIsInstance(self.address.cep, int)
 
     def test_address_field_value(self):
+        """
+        Teste para verificar os valores dos campos de address
+        """
         self.assertEqual(self.address.place, self.place)
         self.assertEqual(self.address.number, self.number)
         self.assertEqual(self.address.neighborhood, self.neighborhood)
