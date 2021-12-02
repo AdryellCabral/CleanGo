@@ -219,13 +219,13 @@ class AccountPartnerByIdView(APIView):
                     if not data_address_serializer.is_valid():
                         return Response(data_address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                     update_address_data = Address.objects.get_or_create(**update_data['address'])
-                    update_data['address'] = update_address_data[0].__dict__                     
+                    update_data['address'] = update_address_data[0].__dict__            
 
                 if update_data.get('services'):
                     data_service_serializer = ServiceTypePartnerSerializer(data={'name': update_data['services']})
                     if not data_service_serializer.is_valid():
                         return Response(data_service_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
-                    update_data['services'] = ServiceType.objects.get(name=update_data['services'])
+                    update_data['services'] = ServiceType.objects.get(name=update_data['services']).__dict__
 
                 data_serializer = PartnerUpdateSerializer(partner, data=update_data)
                 if not data_serializer.is_valid():
@@ -233,7 +233,7 @@ class AccountPartnerByIdView(APIView):
         
                 data_serializer.save()
 
-                updated_customer = Partner.objects.get(id=customer_id)
+                updated_customer = Partner.objects.get(id=customer_id)                
                 serialized = PartnerResponseSerializer(updated_customer)
 
                 return Response(serialized.data, status=status.HTTP_200_OK)
