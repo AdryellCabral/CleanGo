@@ -146,7 +146,7 @@ class TestOrdersView(APITestCase):
                 phone="45921541253",
             ),
             partner=None
-        )]  
+        )]
 
         cls.customer_login_data = dict(
             username=cls.customer.user_customer.username,
@@ -165,7 +165,9 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer.user_customer)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
@@ -179,10 +181,7 @@ class TestOrdersView(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertDictEqual(
             response.json(),
-            dict(
-                id=1,
-                **self.order_successful_data
-            )
+            *self.list_order_successful_data
         )
 
     def test_create_an_order_with_invalid_token(self):
@@ -217,7 +216,9 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer.user_customer)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
@@ -261,7 +262,9 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer.user_customer)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
         # Fazendo a criação de uma ordem.
@@ -269,11 +272,11 @@ class TestOrdersView(APITestCase):
             '/api/orders/',
             self.order_successful_data,
             format='json'
-        )       
+        )
 
         # Fazendo o request get de uma ordem.
         response = self.client.get(
-            '/api/orders/'          
+            '/api/orders/'
         )
 
         # Fazendo o teste mal sucedido com a resposta da criação.
@@ -291,8 +294,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de partner.
-        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.partner.user_partner
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
@@ -310,10 +315,10 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Order.object.all()), len(response.data))
+        self.assertEquals(len([1]), len(response.data))
         self.assertEqual(
-            response.data[0].pop('id'),
-            self.order_successful_data
+            response.json(),
+            self.list_order_successful_data
         )
 
     def test_get_order_by_id_unsuccessful_without_authentication(self):
@@ -343,8 +348,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
@@ -362,10 +369,10 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Order.object.all()), len(response.data))
+        self.assertEquals(len([1]), len(response.data))
         self.assertEqual(
-            response.data[0].pop('id'),
-            self.order_successful_data
+            response.json(),
+            self.list_order_successful_data
         )
 
     def test_get_order_by_id_successful_with_partner_authentication(self):
@@ -373,9 +380,11 @@ class TestOrdersView(APITestCase):
         Teste de request get bem sucedido de ordem logado com partner.
         """
 
-        # Simulando um login de partner.
-        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        # Simulando um login de customer.
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         response = self.client.post(
@@ -383,6 +392,12 @@ class TestOrdersView(APITestCase):
             self.order_successful_data,
             format='json'
         )
+
+        # Simulando um login de partner.
+        token, _ = Token.objects.get_or_create(
+            user=self.partner.user_partner
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo o request get de uma ordem.
         response = self.client.get(
@@ -393,10 +408,10 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o teste mal sucedido com a resposta da criação.
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(Order.object.all()), len(response.data))
+        self.assertEquals(len([1]), len(response.data))
         self.assertEqual(
-            response.data[0].pop('id'),
-            self.order_successful_data
+            response.json(),
+            self.list_order_successful_data
         )
 
     def test_order_accepted_by_partner_and_completed_by_customer(self):
@@ -405,8 +420,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         new_order = self.client.post(
@@ -416,12 +433,14 @@ class TestOrdersView(APITestCase):
         )
 
         # Simulando um login de partner.
-        token, _ = Token.objects.get_or_create(user=self.partner_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.partner.user_partner
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo o request path para aceitar a ordem.
         response = self.client.patch(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.data["id"]}',
             dict(opened=False),
             format='json'
         )
@@ -430,12 +449,14 @@ class TestOrdersView(APITestCase):
         new_order.refresh_from_db()
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo o request path para completar a ordem.
         response = self.client.patch(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.data["id"]}',
             dict(completed=True),
             format='json'
         )
@@ -451,8 +472,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         new_order = self.client.post(
@@ -463,7 +486,7 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o request path da order.
         response = self.client.patch(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.data["id"]}',
             dict(opened=False),
             format='json'
         )
@@ -477,8 +500,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         new_order = self.client.post(
@@ -492,13 +517,13 @@ class TestOrdersView(APITestCase):
 
         # Fazendo o request path da order.
         response = self.client.patch(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.data["id"]}',
             dict(opened=False),
             format='json'
         )
 
         # Fazendo os testes de aceite da ordem
-        self.assertEquals(400, response.status_code)
+        self.assertEquals(401, response.status_code)
 
     def test_delete_order_by_customer(self):
         """
@@ -506,8 +531,10 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
         new_order = self.client.post(
@@ -518,7 +545,7 @@ class TestOrdersView(APITestCase):
 
         # Deletando uma ordem
         response = self.client.delete(
-            f'/api/orders/{new_order.id}',
+            f'/api/orders/{new_order.data["id"]}',
             format='json'
         )
 
@@ -550,7 +577,9 @@ class TestOrdersView(APITestCase):
         """
 
         # Simulando um login de customer.
-        token, _ = Token.objects.get_or_create(user=self.customer_login_data)
+        token, _ = Token.objects.get_or_create(
+            user=self.customer.user_customer
+            )
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
         # Fazendo a criação de uma ordem.
@@ -565,7 +594,7 @@ class TestOrdersView(APITestCase):
 
         # Tentando deletar uma ordem
         response = self.client.delete(
-            f'/api/orders/{new_order.id}/',
+            f'/api/orders/{new_order.data["id"]}/',
             format='json'
         )
 
