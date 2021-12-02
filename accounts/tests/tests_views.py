@@ -8,6 +8,9 @@ from accounts.serializers import CustomerSerializer
 
 class CustomerViewTest(APITestCase):
     def test_create_new_customer(self):
+        """
+        Teste para criação de um usuário customer
+        """
         customer_data = {
             'username': 'john@mail.com',
             'email': 'john@mail.com',
@@ -30,6 +33,9 @@ class CustomerViewTest(APITestCase):
     
     
     def test_create_customer_fail_when_missing_fields(self):
+        """
+        Teste para criação falha por falta de campos de um usuário customer
+        """
         customer_data = {
             'email': 'john@mail.com',
             'password': '1234',            
@@ -42,6 +48,9 @@ class CustomerViewTest(APITestCase):
 
     
     def test_create_customer_fail_when_cpf_exists(self):
+        """
+        Teste para criação falha por cpf já cadastrado
+        """
         user = User.objects.create_user(
             username = 'john@mail.com',
             email = 'john@mail.com',
@@ -84,6 +93,9 @@ class LoginCustomerViewTest(APITestCase):
 
     
     def test_login_success(self):
+        """
+        Teste para login de usuário
+        """
         login_data = {
             'email': 'john@mail.com',
             'password': '1234',
@@ -97,6 +109,9 @@ class LoginCustomerViewTest(APITestCase):
 
 
     def test_login_fail(self):
+        """
+        Teste para login falho
+        """
         login_data = {
             'email': 'john@mail.com',
             'password': '123',
@@ -117,6 +132,9 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
 
             
     def test_anyone_authenticated_can_search_for_a_specific_customer_by_id(self):
+        """
+        Teste busca por customer específico por id necessita de autenticação
+        """
         response = self.client.get(f'/api/customers/{self.customer.id}/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -124,12 +142,18 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
 
 
     def test_is_is_not_possible_to_search_for_a_customer_by_id_that_does_not_exist(self): 
+        """
+        Teste busca falha por customer que não existe
+        """
         response = self.client.get(f'/api/customers/{self.customer.id + 1}/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
 
     def test_anonymous_cannot_search_for_a_specific_customer_by_id(self):
+        """
+        Teste busca por customer específico necessita de autenticação
+        """
         self.client.force_authenticate(user=None)
 
         response = self.client.get(f'/api/customers/{self.customer.id}/', format='json')
@@ -138,6 +162,9 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
 
 
     def test_only_the_customer_himself_can_update_his_data(self):
+        """
+        Teste apenas o próprio customer pode atualizar os próprios dados
+        """
         customer_data = {
             'phone': '888888888'
         }
@@ -152,7 +179,10 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
             self.assertEquals(v, getattr(self.customer.user_customer, k))
         
 
-    def test_is_is_not_possible_to_update_a_customer_by_id_that_does_not_exist(self):        
+    def test_is_is_not_possible_to_update_a_customer_by_id_that_does_not_exist(self):    
+        """
+        Teste atualização de dados de um customer inexistente deve falhar
+        """    
         customer_data = {
             'phone': '888888888'
         }
@@ -165,6 +195,9 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
 
 
     def test_a_customer_cannot_update_another_customer_data(self):
+        """
+        Teste busca por customer específico necessita de autenticação
+        """
         user_2 = User.objects.create(username = 'johnteste2@mail.com', password = '1234', email = 'john2@mail.com', full_name = 'Jonh Field', cpf = '21111111112', phone = '9999999981')            
         customer_2 = Customer.objects.create(user_customer=user_2)    
 
@@ -185,6 +218,9 @@ class PartnerViewTest(APITestCase):
 
 
     def test_create_new_partner(self):
+        """
+        Teste criação de conta de partner
+        """
         partner_data = {
             'username': 'john@mail.com',
             'email': 'john@mail.com',
@@ -225,6 +261,9 @@ class PartnerViewTest(APITestCase):
     
     
     def test_create_partner_fail_when_missing_fields(self):
+        """
+        Teste criação de conta de partner deve falhar caso campos faltantes
+        """
         customer_data = {
             'username': 'john@mail.com',
             'email': 'john@mail.com',
@@ -253,6 +292,9 @@ class PartnerViewTest(APITestCase):
 
     
     def test_create_user_fail_when_cpf_exists(self):
+        """
+        Teste criação de conta de partner deve falhar caso cpf já esteja registrado.
+        """
         user = User.objects.create_user(
             username = 'john2@mail.com',
             email = 'john2@mail.com',
@@ -351,6 +393,9 @@ class LoginPartnerViewTest(APITestCase):
     
 
     def test_login_success(self):
+        """
+        Teste login sucedido
+        """
         login_data = {
             'email': 'john2@mail.com',
             'password': '1234',
@@ -364,6 +409,9 @@ class LoginPartnerViewTest(APITestCase):
 
 
     def test_login_fail(self):
+        """
+        Teste login falho.
+        """
         login_data = {
             'email': 'john2@mail.com',
             'password': '123',
@@ -414,7 +462,10 @@ class UpdatingPartnerTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
 
 
-    def test_only_the_partner_himself_can_update_his_data(self):         
+    def test_only_the_partner_himself_can_update_his_data(self):
+        """
+        Teste apenas o próprio partner pode atualizar os próprios dados
+        """
         partner_data = {
             'phone': '888888888',
             'address': {'place': 'Rua das Pameiras',
@@ -436,7 +487,10 @@ class UpdatingPartnerTest(APITestCase):
         self.assertEqual(response.json()['address']['place'], 'Rua das Pameiras')
                     
 
-    def test_is_is_not_possible_to_update_a_partner_by_id_that_does_not_exist(self):        
+    def test_is_is_not_possible_to_update_a_partner_by_id_that_does_not_exist(self):
+        """
+        Teste é impossivel atualizar dados de um partner inexistente
+        """
         partner_data = {
             'phone': '888888888',
             'address': {'place': 'Rua das Pameiras',
@@ -457,6 +511,9 @@ class UpdatingPartnerTest(APITestCase):
 
 
     def test_a_partner_cannot_update_another_user_data(self):
+        """
+        Teste é impossivel atualizar dados de um outro usuário
+        """
         user_2 = User.objects.create_user(
             username = 'john2@mail.com',
             email = 'john2@mail.com',
