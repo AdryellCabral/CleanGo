@@ -10,6 +10,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+import ipdb
 
 
 class OrdersView(APIView):
@@ -66,7 +67,7 @@ class OrdersRetrieveUpdateDeleteView(APIView):
     def patch(self, request,order_id):
         try:
             order = Order.objects.get(id=order_id)
-            order_serializer = OrderSerializer(order,data=request.data)
+            order_serializer = OrderSerializer(order,data=request.data,partial=True)
             if not order_serializer.is_valid():
                 return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             order_serializer.save()
