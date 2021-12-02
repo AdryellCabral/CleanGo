@@ -1,16 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from accounts.serializers import UserSerializer, CustomerSerializer 
-from accounts.models import User, Customer, Partner
+from accounts.models import Customer
 from orders.permissions import IsCustomerOrReadOnly
-from orders.serializers import OrderSerializer, ServiceTypeSerializer, AddressSerializer, ResidenceTypeSerializer
+from orders.serializers import OrderSerializer
 from orders.models import Order, ServiceType, Address, ResidenceType
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
-import ipdb
 
 
 class OrdersView(APIView):
