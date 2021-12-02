@@ -32,12 +32,12 @@ class TestOrderModel(TestCase):
             name = cls.residenceName
         )
 
-        cls.place="Upton Forge",
-        cls.number="t",
-        cls.neighborhood="Account",
-        cls.complements="fuchsia Applications TCP",
-        cls.city="North Alberto",
-        cls.state="SP",
+        cls.place="Upton Forge"
+        cls.number="t"
+        cls.neighborhood="Account"
+        cls.complements="fuchsia Applications TCP"
+        cls.city="North Alberto"
+        cls.state="SP"
         cls.cep=82000000
 
         cls.address = Address.objects.create(
@@ -51,12 +51,12 @@ class TestOrderModel(TestCase):
         )
 
         cls.hours = 2
-        cls.date = date.fromisoformat("01/01/2030")
+        cls.date=date.fromisoformat("2030-09-10")
         cls.bathrooms = 2
         cls.bedrooms = 2
         cls.value = 200.00
-        cls.opened = True,
-        cls.completed = False,
+        cls.opened = True
+        cls.completed = False
 
         cls.order = Order.objects.create(
             hours = cls.hours,
@@ -64,14 +64,18 @@ class TestOrderModel(TestCase):
             bathrooms = cls.bathrooms,
             bedrooms = cls.bedrooms,
             value = cls.value,
-            residences = cls.residenceType,
-            service = cls.serviceType,
+            residence = cls.residence,
+            service = cls.service,
             opened = cls.opened,
             completed = cls.completed,
-            address = cls.address
+            address = cls.address,
+            customer = cls.customer
         )
 
     def test_order_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de order
+        """
         self.assertIsInstance(self.order.hours, int)
         self.assertIsInstance(self.order.date, date)
         self.assertIsInstance(self.order.bathrooms, int)
@@ -81,6 +85,9 @@ class TestOrderModel(TestCase):
         self.assertIsInstance(self.order.completed, bool)
     
     def test_order_field_value(self):
+        """
+        Teste para verificar os valores dos campos de order
+        """
         self.assertEqual(self.order.hours, self.hours)
         self.assertEqual(self.order.date, self.date)
         self.assertEqual(self.order.bathrooms, self.bathrooms)
@@ -90,18 +97,33 @@ class TestOrderModel(TestCase):
         self.assertEqual(self.order.completed, self.completed)
 
     def test_service_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de service
+        """
         self.assertIsInstance(self.service.name, str)
 
     def test_service_field_value(self):
+        """
+        Teste para verificar os valores dos campos de service
+        """
         self.assertEqual(self.service.name, self.serviceName)
 
     def test_residence_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de residence
+        """
         self.assertIsInstance(self.residence.name, str)
 
     def test_residence_field_value(self):
+        """
+        Teste para verificar os valores dos campos de residence
+        """
         self.assertEqual(self.residence.name, self.residenceName)
 
     def test_address_field_type(self):
+        """
+        Teste para verificar os tipos dos campos de address
+        """
         self.assertIsInstance(self.address.place, str)
         self.assertIsInstance(self.address.number, str)
         self.assertIsInstance(self.address.neighborhood, str)
@@ -111,6 +133,9 @@ class TestOrderModel(TestCase):
         self.assertIsInstance(self.address.cep, int)
 
     def test_address_field_value(self):
+        """
+        Teste para verificar os valores dos campos de address
+        """
         self.assertEqual(self.address.place, self.place)
         self.assertEqual(self.address.number, self.number)
         self.assertEqual(self.address.neighborhood, self.neighborhood)
