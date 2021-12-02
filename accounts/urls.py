@@ -1,8 +1,13 @@
 from django.urls import path
-from .views import AccountView, LoginView, AccountByIdView 
+from .views import AccountCustomerView, LoginCustomerView, AccountCustomerByIdView,\
+     AccountPartnerView, LoginPartnerView, AccountPartnerByIdView 
+
 
 urlpatterns = [
-    path('customers/', AccountView.as_view()),
-    path('customers/login/', LoginView.as_view()),
-    path('customers/<int:customer_id>/', AccountByIdView.as_view()),
+    path('customers/', AccountCustomerView.as_view()),
+    path('partners/', AccountPartnerView.as_view()),
+    path('customers/login/', LoginCustomerView.as_view()),
+    path('partners/login/', LoginPartnerView.as_view()),
+    path('customers/<int:customer_id>/', AccountCustomerByIdView.as_view()),
+    path('partners/<int:customer_id>/', AccountPartnerByIdView.as_view()),
 ]

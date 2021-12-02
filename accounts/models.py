@@ -18,8 +18,9 @@ class Partner(models.Model):
     birthday = models.DateField()
 
     user_partner = models.OneToOneField('User', on_delete=models.CASCADE)
-    # service = models.ForeignKey('orders.ServiceType', on_delete=models.CASCADE, related_name='partners')
-    # address = models.ForeignKey('orders.Address', on_delete=models.CASCADE, related_name='partners')   
+
+    service = models.ForeignKey('orders.ServiceType', on_delete=models.CASCADE, related_name='partners')
+    address = models.ForeignKey('orders.Address', on_delete=models.CASCADE, related_name='partners')   
 
 
 
