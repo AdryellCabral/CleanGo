@@ -125,7 +125,7 @@ test_unsuccessful_order_not_found (orders.tests.test_views.TestOrdersView)
 Teste mal sucedido por não achar o id da ordem ... ok
 
 ----------------------------------------------------------------------
-Ran 44 tests in 4.492s
+Ran 44 tests in 3.523s
 
 OK
 Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
