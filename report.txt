@@ -548,7 +548,7 @@ Traceback (most recent call last):
 orders.models.ResidenceType.MultipleObjectsReturned: get() returned more than one ResidenceType -- it returned 2!
 
 ----------------------------------------------------------------------
-Ran 44 tests in 3.075s
+Ran 44 tests in 3.114s
 
 FAILED (errors=9)
 Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...

@@ -16,8 +16,8 @@ class CustomerViewTest(APITestCase):
             'email': 'john@mail.com',
             'password': '1234',            
             'full_name': 'John Field',
-            'cpf': '11111111111',
-            'phone': '999999999',
+            'cpf': '888.888.888-88',
+            'phone': '(21)97777-7777',
             'is_staff': True
         }
    
@@ -26,8 +26,8 @@ class CustomerViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['email'], 'john@mail.com')
         self.assertEqual(response.json()['full_name'], 'John Field')
-        self.assertEqual(response.json()['cpf'], '11111111111')
-        self.assertEqual(response.json()['phone'], '999999999')
+        self.assertEqual(response.json()['cpf'], '888.888.888-88')
+        self.assertEqual(response.json()['phone'], '(21)97777-7777')
         self.assertNotIn('password', response.json())
         self.assertNotIn('username', response.json())
     
@@ -56,8 +56,8 @@ class CustomerViewTest(APITestCase):
             email = 'john@mail.com',
             password = '1234',
             full_name = 'Jonh Field',
-            cpf = '11111111111',
-            phone = '999999999',
+            cpf = '888.888.888-88',
+            phone = '(21)97777-7777',
             is_staff = True
         )
 
@@ -67,8 +67,8 @@ class CustomerViewTest(APITestCase):
             'email': 'john@mail.com',
             'password': '1234',            
             'full_name': 'John Field',
-            'cpf': '11111111111',
-            'phone': '888888888',
+            'cpf': '888.888.888-77',
+            'phone': '(21)97777-8888',
             'is_staff': True
         }
     
@@ -84,8 +84,8 @@ class LoginCustomerViewTest(APITestCase):
             email = 'john@mail.com',
             password = '1234',
             full_name = 'Jonh Field',
-            cpf = '11111111111',
-            phone = '999999999',
+            cpf = '888.888.888-88',
+            phone = '(21)97777-7777',
             is_staff = True
         )
 
@@ -125,7 +125,7 @@ class LoginCustomerViewTest(APITestCase):
 
 class SeachingAndUpdatingCustomerTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create(username = 'john@mail.com', password = '1234', email = 'john@mail.com', full_name = 'Jonh Field', cpf = '11111111111', phone = '999999999', is_staff = True)            
+        self.user = User.objects.create(username = 'john@mail.com', password = '1234', email = 'john@mail.com', full_name = 'Jonh Field', cpf = '111.111.111-11', phone = '(21)99999-9999', is_staff = True)            
         self.customer = Customer.objects.create(user_customer=self.user)
         self.token = Token.objects.create(user=self.customer.user_customer)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}') 
@@ -166,7 +166,7 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
         Teste apenas o próprio customer pode atualizar os próprios dados
         """
         customer_data = {
-            'phone': '888888888'
+            'phone': '(11)98888-8888'
         }
 
         response = self.client.patch(f'/api/customers/{self.customer.id}/', customer_data, format='json')
@@ -184,7 +184,7 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
         Teste atualização de dados de um customer inexistente deve falhar
         """    
         customer_data = {
-            'phone': '888888888'
+            'phone': '(11)98888-8888'
         }
 
         response = self.client.patch(f'/api/customers/{self.customer.id + 1}/', customer_data, format='json')
@@ -198,11 +198,11 @@ class SeachingAndUpdatingCustomerTest(APITestCase):
         """
         Teste busca por customer específico necessita de autenticação
         """
-        user_2 = User.objects.create(username = 'johnteste2@mail.com', password = '1234', email = 'john2@mail.com', full_name = 'Jonh Field', cpf = '21111111112', phone = '9999999981')            
+        user_2 = User.objects.create(username = 'johnteste2@mail.com', password = '1234', email = 'john2@mail.com', full_name = 'Jonh Field', cpf = '211.111.111-12', phone = '(11)99999-1111')            
         customer_2 = Customer.objects.create(user_customer=user_2)    
 
         customer_data = {
-            'phone': '8888888881'
+            'phone': '(11)98888-8881'
         }
 
         response = self.client.patch(f'/api/customers/{customer_2.id}/', customer_data, format='json')
@@ -223,8 +223,8 @@ class PartnerViewTest(APITestCase):
             'email': 'john@mail.com',
             'password': '1234',            
             'full_name': 'John Field',
-            'cpf': '11111111111',
-            'phone': '999999999',
+            'cpf': '111.111.111-11',
+            'phone': '(11)99999-9999',
             'birthday': '1999-01-01',
             'gender': 'M',            
             'address':{
@@ -246,8 +246,8 @@ class PartnerViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['email'], 'john@mail.com')
         self.assertEqual(response.json()['full_name'], 'John Field')
-        self.assertEqual(response.json()['cpf'], '11111111111')
-        self.assertEqual(response.json()['phone'], '999999999')
+        self.assertEqual(response.json()['cpf'], '111.111.111-11')
+        self.assertEqual(response.json()['phone'], '(11)99999-9999')
         self.assertEqual(response.json()['birthday'], '1999-01-01')
         self.assertEqual(response.json()['gender'], 'M')
         self.assertEqual(response.json()['describe'], 'Limpeza total em qualquer tipo de residência.')
@@ -266,7 +266,7 @@ class PartnerViewTest(APITestCase):
             'email': 'john@mail.com',
             'password': '1234',            
             'full_name': 'John Field',
-            'phone': '11999999999',
+            'phone': '(11)99998-9999',
             'birthday': '1999-01-01',
             'gender': 'M',            
             'address':{
@@ -297,8 +297,8 @@ class PartnerViewTest(APITestCase):
             email = 'john2@mail.com',
             password = '1234',            
             full_name = 'John Field',
-            cpf = '11111111111',
-            phone = '999999998',
+            cpf = '111.111.111-11',
+            phone = '(41)99999-9998',
             is_staff = False
         )
 
@@ -330,8 +330,8 @@ class PartnerViewTest(APITestCase):
             'email': 'john2@mail.com',
             'password': '1234',            
             'full_name': 'John Field',
-            'cpf': '11111111111',
-            'phone': '999999998',
+            'cpf': '111.111.111-11',
+            'phone': '(51)99999-9998',
             'birthday': '1999-01-01',
             'gender': 'M',            
             'address':{
@@ -360,8 +360,8 @@ class LoginPartnerViewTest(APITestCase):
             email = 'john2@mail.com',
             password = '1234',            
             full_name = 'John Field',
-            cpf = '11111111110',
-            phone = '999999998',
+            cpf = '111.111.111-10',
+            phone = '(51)99999-9998',
             is_staff = False
         )
 
@@ -427,8 +427,8 @@ class UpdatingPartnerTest(APITestCase):
             email = 'john@mail.com',
             password = '1234',            
             full_name = 'John Field',
-            cpf = '11111111111',
-            phone = '999999998',
+            cpf = '111.111.111-11',
+            phone = '(21)99999-9998',
             is_staff = False
         )
 
@@ -464,7 +464,7 @@ class UpdatingPartnerTest(APITestCase):
         Teste apenas o próprio partner pode atualizar os próprios dados
         """
         partner_data = {
-            'phone': '888888888',
+            'phone': '(21)98888-8888',
             'address': {'place': 'Rua das Pameiras',
                         'number': '12',
                         'neighborhood': 'Vila Norte',
@@ -480,7 +480,7 @@ class UpdatingPartnerTest(APITestCase):
         self.partner.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()['phone'], '888888888')
+        self.assertEqual(response.json()['phone'], '(21)98888-8888')
         self.assertEqual(response.json()['address']['place'], 'Rua das Pameiras')
                     
 
@@ -489,7 +489,7 @@ class UpdatingPartnerTest(APITestCase):
         Teste é impossivel atualizar dados de um partner inexistente
         """
         partner_data = {
-            'phone': '888888888',
+            'phone': '(21)98888-8888',
             'address': {'place': 'Rua das Pameiras',
                         'number': '12',
                         'neighborhood': 'Vila Norte',
@@ -516,20 +516,20 @@ class UpdatingPartnerTest(APITestCase):
             email = 'john2@mail.com',
             password = '1234',            
             full_name = 'John Field',
-            cpf = '11111111110',
-            phone = '999999990',
+            cpf = '111.111.111-10',
+            phone = '(11)99999-9990',
             is_staff = False
         )
 
-        service_2 = ServiceType.objects.create(
-            name = 'Limpeza Residencial'
+        service_2 = ServiceType.objects.get(
+            name = 'Passadoria'
         )
 
         partner_address_2 = Address.objects.create(
             place = 'Rua das Araras',
             number = '10',
-            neighborhood = 'Vila Norte',
-            complements = 'apt.102',
+            neighborhood = 'Vila Sul',
+            complements = 'apt.104',
             city = 'São Paulo',
             state = 'SP',
             cep = '82000000'
@@ -545,7 +545,7 @@ class UpdatingPartnerTest(APITestCase):
         )     
 
         partner_data = {
-            'phone': '888888888'
+            'phone': '(21)98888-8888'
         }
 
         response = self.client.patch(f'/api/partners/{partner_2.id}/', partner_data, format='json')

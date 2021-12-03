@@ -10,8 +10,8 @@ class CustomerModelTest(TestCase):
         cls.email = 'john@mail.com'
         cls.password = '1234'
         cls.full_name = 'Jonh Field'
-        cls.cpf = '11111111111'
-        cls.phone = '999999999'     
+        cls.cpf = '888.888.888-88'
+        cls.phone = '(21)97777-7777'     
 
         cls.user = User.objects.create_user(
             username=cls.username,
@@ -29,8 +29,8 @@ class CustomerModelTest(TestCase):
         cls.user_for_partner = User.objects.create(
             password="1234",
             full_name="John Wick Loves his dog",
-            cpf="12345678912",
-            phone="31912345678",
+            cpf = '888.888.888-99',
+            phone = '(21)97777-8888'   
         )
 
         cls.service = ServiceType.objects.create(
