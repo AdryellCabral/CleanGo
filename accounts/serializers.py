@@ -1,7 +1,21 @@
+from django.core import validators
 from rest_framework import serializers
 from orders.models import Address, ServiceType
-from accounts.models import User
+from django.core.exceptions import ValidationError
 import re
+
+
+# def regexCPF(cpf):
+#     if not re.fullmatch('[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}', cpf):
+#         raise ValidationError('CPF must be informed in the following format: xxx.xxx.xxx-xx.')
+#     return cpf   
+
+
+# def regexPhone(phone):
+#     if not re.fullmatch('\([1-9]{2}\)9[0-9]{4}\-[0-9]{4}', phone):
+#         raise ValidationError('Phone must be informed in the following format: (xx)9xxxx-xxxx.')
+#     return phone   
+
 
 class UserSerializer(serializers.Serializer):
 
@@ -12,17 +26,11 @@ class UserSerializer(serializers.Serializer):
     full_name = serializers.CharField()
     cpf = serializers.CharField()
     phone = serializers.CharField()
+    # cpf = serializers.CharField(validators=[regexCPF])
+    # phone = serializers.CharField(validators=[regexPhone])
     is_staff = serializers.BooleanField(write_only=True)
-    
+
   
-    # def validate(self, attrs):
-    #     cpf = attrs['cpf']
-    #     if re.fullmatch(r'^\[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$', cpf) != None:
-    #         return attrs                
-    #     else:
-    #         raise PhoneFormatError('Phone must be informed in the following format: (xx)9xxxx-xxxx.')
-
-
 class CustomerSerializer(serializers.Serializer):
 
     id = serializers.IntegerField(read_only=True)

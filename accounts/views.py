@@ -11,6 +11,7 @@ from orders.models import ServiceType, Address
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
+import re
 
 
 class AccountCustomerView(APIView):
@@ -21,7 +22,7 @@ class AccountCustomerView(APIView):
                
         if not data.get('email'):            
             return Response({'message': 'You must inform your email.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+     
         data['username'] = data['email']
         data['is_staff'] = True
 

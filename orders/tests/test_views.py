@@ -1,4 +1,3 @@
-import ipdb
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
@@ -47,10 +46,8 @@ class TestOrdersView(APITestCase):
             cep="82000000"
         )
 
-        cls.residence = ResidenceType.objects.create(**dict(name='Casa'))
-        cls.service = ServiceType.objects.create(
-            **dict(name="Limpeza Residencial")
-        )
+        cls.residence = ResidenceType.objects.get(id=1)
+        cls.service = ServiceType.objects.get(id=1)
         user_costumer = User.objects.create_user(
             **user_to_customer_data
             )
